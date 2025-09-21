@@ -1,0 +1,105 @@
+import { useState } from "react";
+import { Comment, User } from "@/lib/storage";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { MessageCircle, Heart } from "lucide-react";
+
+interface CommentSectionProps {
+  postId: string;
+  comments: Comment[];
+  currentUser: User;
+  onAddComment: (postId: string, content: string) => void;
+  onLikeComment: (commentId: string) => void;
+}
+
+export const CommentSection = ({ 
+  postId, 
+  comments, 
+  currentUser, 
+  onAddComment, 
+  onLikeComment 
+}: CommentSectionProps) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [newComment, setNewComment] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async () => {
+    if (!newComment.trim() || isSubmitting) return;
+    
+    setIsSubmitting(true);
+    try {
+      onAddComment(postId, newComment.trim());
+      setNewComment("");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div>
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="text-muted-foreground hover:text-primary transition-colors"
+      >
+        <MessageCircle className="w-4 h-4 mr-2" />
+        {comments.length > 0 ? `${comments.length} মন্তব্য` : 'মন্তব্য করুন'}
+      </Button>
+
+      {isExpanded && (
+        <div className="mt-4 space-y-4 border-t border-border pt-4">
+          {/* Add Comment Form */}
+          <div className="space-y-3">
+            <Textarea
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              placeholder="আপনার মন্তব্য লিখুন..."
+              className="min-h-[80px] text-bengali"
+            />
+            <div className="flex justify-end">
+              <Button 
+                onClick={handleSubmit}
+                disabled={!newComment.trim() || isSubmitting}
+                size="sm"
+              >
+                {isSubmitting ? 'পোস্ট করা হচ্ছে...' : 'মন্তব্য করুন'}
+              </Button>
+            </div>
+          </div>
+
+          {/* Comments List */}
+          <div className="space-y-3">
+            {comments.map((comment) => (
+              <div key={comment.id} className="bg-muted/20 rounded-lg p-3">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-6 h-6 bg-gradient-hero rounded-full flex items-center justify-center text-xs text-white font-semibold">
+                    {comment.author.name.charAt(0)}
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm font-medium text-bengali">
+                      {comment.author.name}
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      {new Date(comment.createdAt).toLocaleString('bn-BD')}
+                    </div>
+                  </div>
+                </div>
+                <p className="text-sm text-bengali mb-2">{comment.content}</p>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => onLikeComment(comment.id)}
+                  className="text-muted-foreground hover:text-primary transition-colors p-0 h-auto"
+                >
+                  <Heart className="w-3 h-3 mr-1" />
+                  <span className="text-xs">{comment.likes}</span>
+                </Button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};

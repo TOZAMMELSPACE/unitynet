@@ -36,7 +36,8 @@ export const PostForm = ({ user, onPostCreated }: PostFormProps) => {
         content: content.trim(),
         community,
         createdAt: new Date().toISOString(),
-        likes: 0
+        likes: 0,
+        comments: []
       };
 
       onPostCreated(newPost);

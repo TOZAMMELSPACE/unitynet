@@ -15,6 +15,8 @@ interface IndexProps {
   onRegister: (user: User) => void;
   onPostCreated: (post: Post) => void;
   onLikePost: (postId: string) => void;
+  onAddComment: (postId: string, content: string) => void;
+  onLikeComment: (commentId: string) => void;
 }
 
 const Index = ({
@@ -24,6 +26,8 @@ const Index = ({
   onSignOut,
   onPostCreated,
   onLikePost,
+  onAddComment,
+  onLikeComment,
 }: IndexProps) => {
   return (
     <div className="min-h-screen bg-background">
@@ -58,7 +62,10 @@ const Index = ({
               <h3 className="text-lg font-semibold mb-4">Community Feed</h3>
               <Feed 
                 posts={posts} 
-                onLikePost={onLikePost} 
+                currentUser={currentUser}
+                onLikePost={onLikePost}
+                onAddComment={onAddComment}
+                onLikeComment={onLikeComment}
               />
             </div>
           </div>

@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AppLayout } from "@/components/AppLayout";
+import { ThemeProvider } from "@/hooks/useTheme";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Notifications from "./pages/Notifications";
@@ -18,25 +19,27 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <AppLayout>
-          {(props) => (
-            <Routes>
-              <Route path="/" element={<Index {...props} />} />
-              <Route path="/notifications" element={<Notifications currentUser={props.currentUser} onSignOut={props.onSignOut} />} />
-              <Route path="/messages" element={<Messages currentUser={props.currentUser} onSignOut={props.onSignOut} />} />
-              <Route path="/explore" element={<Explore currentUser={props.currentUser} onSignOut={props.onSignOut} />} />
-              <Route path="/profile" element={<Profile currentUser={props.currentUser} onSignOut={props.onSignOut} posts={props.posts} />} />
-              <Route path="/groups" element={<Groups currentUser={props.currentUser} onSignOut={props.onSignOut} />} />
-              <Route path="/settings" element={<Settings currentUser={props.currentUser} onSignOut={props.onSignOut} />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          )}
-        </AppLayout>
-      </BrowserRouter>
+      <ThemeProvider defaultTheme="light" storageKey="unity-theme">
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <AppLayout>
+            {(props) => (
+              <Routes>
+                <Route path="/" element={<Index {...props} />} />
+                <Route path="/notifications" element={<Notifications currentUser={props.currentUser} onSignOut={props.onSignOut} />} />
+                <Route path="/messages" element={<Messages currentUser={props.currentUser} onSignOut={props.onSignOut} />} />
+                <Route path="/explore" element={<Explore currentUser={props.currentUser} onSignOut={props.onSignOut} />} />
+                <Route path="/profile" element={<Profile currentUser={props.currentUser} onSignOut={props.onSignOut} posts={props.posts} onUpdateProfile={props.onUpdateProfile} />} />
+                <Route path="/groups" element={<Groups currentUser={props.currentUser} onSignOut={props.onSignOut} />} />
+                <Route path="/settings" element={<Settings currentUser={props.currentUser} onSignOut={props.onSignOut} />} />
+                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            )}
+          </AppLayout>
+        </BrowserRouter>
+      </ThemeProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

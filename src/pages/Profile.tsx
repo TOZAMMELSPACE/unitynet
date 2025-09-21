@@ -8,6 +8,7 @@ interface ProfileProps {
   currentUser: User | null;
   onSignOut: () => void;
   posts: Post[];
+  onUpdateProfile: (user: User) => void;
 }
 
 export default function Profile({ currentUser, onSignOut, posts }: ProfileProps) {

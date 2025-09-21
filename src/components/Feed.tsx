@@ -1,13 +1,18 @@
-import { Post } from "@/lib/storage";
+import { Post, User, Comment } from "@/lib/storage";
 import { Button } from "@/components/ui/button";
 import { Heart, MessageCircle, Share2 } from "lucide-react";
+import { CommentSection } from "@/components/CommentSection";
+import { ShareButton } from "@/components/ShareButton";
 
 interface FeedProps {
   posts: Post[];
+  currentUser: User;
   onLikePost: (postId: string) => void;
+  onAddComment: (postId: string, content: string) => void;
+  onLikeComment: (commentId: string) => void;
 }
 
-export const Feed = ({ posts, onLikePost }: FeedProps) => {
+export const Feed = ({ posts, currentUser, onLikePost, onAddComment, onLikeComment }: FeedProps) => {
   if (posts.length === 0) {
     return (
       <div className="card-enhanced p-8 text-center">
@@ -64,23 +69,18 @@ export const Feed = ({ posts, onLikePost }: FeedProps) => {
               {post.likes}
             </Button>
             
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-muted-foreground hover:text-primary transition-colors"
-            >
-              <MessageCircle className="w-4 h-4 mr-2" />
-              Comment
-            </Button>
+            <CommentSection 
+              postId={post.id}
+              comments={post.comments}
+              currentUser={currentUser}
+              onAddComment={onAddComment}
+              onLikeComment={onLikeComment}
+            />
             
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-muted-foreground hover:text-primary transition-colors"
-            >
-              <Share2 className="w-4 h-4 mr-2" />
-              Share
-            </Button>
+            <ShareButton 
+              postId={post.id} 
+              postContent={post.content}
+            />
           </div>
         </article>
       ))}

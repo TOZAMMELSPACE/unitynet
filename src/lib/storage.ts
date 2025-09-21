@@ -6,6 +6,18 @@ export interface User {
   trustScore: number;
 }
 
+export interface Comment {
+  id: string;
+  postId: string;
+  author: {
+    id: string;
+    name: string;
+  };
+  content: string;
+  createdAt: string;
+  likes: number;
+}
+
 export interface Post {
   id: string;
   author: {
@@ -16,12 +28,14 @@ export interface Post {
   community: string;
   createdAt: string;
   likes: number;
+  comments: Comment[];
 }
 
 // Storage keys
 export const STORAGE = {
   USERS: 'unity_users_v1',
   POSTS: 'unity_posts_v1',
+  COMMENTS: 'unity_comments_v1',
   THEME: 'unity_theme_v1',
   CURRENT_USER: 'unity_current_user_v1',
 };
@@ -63,7 +77,8 @@ export const initializeData = () => {
         content: 'শহরের প্রধান সড়কে বড় গর্ত রয়েছে। সিটি কর্পোরেশনকে জানানো প্রয়োজন।',
         community: 'ward-1',
         createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-        likes: 12
+        likes: 12,
+        comments: []
       },
       {
         id: 'p2',
@@ -71,7 +86,8 @@ export const initializeData = () => {
         content: 'Python শেখার জন্য কোন অনলাইন কোর্স সবচেয়ে ভালো? শুরুতে কি দিয়ে শুরু করা উচিত?',
         community: 'global',
         createdAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-        likes: 8
+        likes: 8,
+        comments: []
       },
       {
         id: 'p3',
@@ -79,7 +95,8 @@ export const initializeData = () => {
         content: 'স্থানীয় লাইব্রেরিতে নতুন বই এসেছে। কমিউনিটির সবাই ব্যবহার করতে পারেন।',
         community: 'ward-2',
         createdAt: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
-        likes: 15
+        likes: 15,
+        comments: []
       }
     ];
     save(STORAGE.POSTS, samplePosts);
