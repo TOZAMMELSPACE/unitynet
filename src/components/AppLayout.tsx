@@ -161,10 +161,10 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
     setUsers(updatedUsers);
     save(STORAGE.USERS, updatedUsers);
 
-    // Update posts with new user name
+    // Update posts with new user name and profile image
     const updatedPosts = posts.map(post => 
       post.author.id === updatedUser.id 
-        ? { ...post, author: { ...post.author, name: updatedUser.name } }
+        ? { ...post, author: { ...post.author, name: updatedUser.name, profileImage: updatedUser.profileImage } }
         : post
     );
     setPosts(updatedPosts);

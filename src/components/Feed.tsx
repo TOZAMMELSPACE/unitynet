@@ -30,9 +30,18 @@ export const Feed = ({ posts, currentUser, onLikePost, onAddComment, onLikeComme
         <article key={post.id} className="card-enhanced p-6 hover:shadow-large transition-all duration-300">
           <div className="flex justify-between items-start mb-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-hero rounded-full flex items-center justify-center text-white font-semibold">
-                {post.author.name.charAt(0)}
-              </div>
+              {/* Profile Image or Avatar */}
+              {post.author.profileImage ? (
+                <img
+                  src={post.author.profileImage}
+                  alt={`${post.author.name} profile`}
+                  className="w-10 h-10 rounded-full object-cover border-2 border-border"
+                />
+              ) : (
+                <div className="w-10 h-10 bg-gradient-hero rounded-full flex items-center justify-center text-white font-semibold">
+                  {post.author.name.charAt(0)}
+                </div>
+              )}
               <div>
                 <div className="font-semibold text-bengali">{post.author.name}</div>
                 <div className="text-sm text-muted-foreground">
@@ -56,6 +65,44 @@ export const Feed = ({ posts, currentUser, onLikePost, onAddComment, onLikeComme
             <p className="text-card-foreground leading-relaxed text-bengali">
               {post.content}
             </p>
+            
+            {/* Post Images */}
+            {post.images && post.images.length > 0 && (
+              <div className={`mt-4 grid gap-2 ${
+                post.images.length === 1 
+                  ? 'grid-cols-1' 
+                  : post.images.length === 2 
+                    ? 'grid-cols-2' 
+                    : post.images.length === 3
+                      ? 'grid-cols-2'
+                      : 'grid-cols-2'
+              }`}>
+                {post.images.map((image, index) => (
+                  <div key={index} className={`relative ${
+                    post.images.length === 3 && index === 0 ? 'col-span-2' : ''
+                  }`}>
+                    <img
+                      src={image}
+                      alt={`Post image ${index + 1}`}
+                      className="w-full h-48 object-cover rounded-lg border border-border cursor-pointer hover:opacity-90 transition-opacity"
+                      onClick={() => {
+                        // Create image preview modal
+                        const overlay = document.createElement('div');
+                        overlay.className = 'fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4';
+                        overlay.onclick = () => overlay.remove();
+                        
+                        const img = document.createElement('img');
+                        img.src = image;
+                        img.className = 'max-w-full max-h-full object-contain rounded-lg';
+                        
+                        overlay.appendChild(img);
+                        document.body.appendChild(overlay);
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="flex items-center gap-4 pt-3 border-t border-border">

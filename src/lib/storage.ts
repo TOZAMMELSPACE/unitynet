@@ -2,7 +2,9 @@
 export interface User {
   id: string;
   name: string;
+  email?: string;
   nidMasked: string;
+  profileImage?: string;
   trustScore: number;
 }
 
@@ -23,8 +25,10 @@ export interface Post {
   author: {
     id: string;
     name: string;
+    profileImage?: string;
   };
   content: string;
+  images?: string[];
   community: string;
   createdAt: string;
   likes: number;
@@ -61,10 +65,10 @@ export const initializeData = () => {
   
   if (users.length === 0) {
     const sampleUsers: User[] = [
-      { id: 'u1', name: 'আয়েশা রহমান', nidMasked: '****1234', trustScore: 85 },
-      { id: 'u2', name: 'রফিকুল ইসলাম', nidMasked: '****6789', trustScore: 72 },
-      { id: 'u3', name: 'Sarah Ahmed', nidMasked: '****5678', trustScore: 90 },
-      { id: 'u4', name: 'মোহাম্মদ হাসান', nidMasked: '****9876', trustScore: 68 }
+      { id: 'u1', name: 'আয়েশা রহমান', email: 'ayesha@example.com', nidMasked: '****1234', trustScore: 85 },
+      { id: 'u2', name: 'রফিকুল ইসলাম', email: 'rafiq@example.com', nidMasked: '****6789', trustScore: 72 },
+      { id: 'u3', name: 'Sarah Ahmed', email: 'sarah@example.com', nidMasked: '****5678', trustScore: 90 },
+      { id: 'u4', name: 'মোহাম্মদ হাসান', email: 'hasan@example.com', nidMasked: '****9876', trustScore: 68 }
     ];
     save(STORAGE.USERS, sampleUsers);
   }
