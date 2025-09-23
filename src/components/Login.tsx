@@ -61,7 +61,13 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
         id: Date.now().toString(),
         name: formData.name.trim(),
         nidMasked: `****${formData.nid.slice(-4)}`,
-        trustScore: 50 // Starting trust score
+        trustScore: 50, // Starting trust score
+        followers: 0,
+        following: 0,
+        achievements: ['early_adopter'],
+        isOnline: true,
+        isVerified: false,
+        joinDate: new Date().toISOString()
       };
       
       onRegister(newUser);

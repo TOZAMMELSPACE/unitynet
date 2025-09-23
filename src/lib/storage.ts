@@ -2,10 +2,40 @@
 export interface User {
   id: string;
   name: string;
+  username?: string;
   email?: string;
   nidMasked: string;
   profileImage?: string;
+  coverImage?: string;
+  bio?: string;
+  location?: string;
+  role?: 'freelancer' | 'trainer' | 'learner' | 'moderator' | 'user';
   trustScore: number;
+  followers: number;
+  following: number;
+  achievements: string[];
+  portfolioItems?: PortfolioItem[];
+  lastOnline?: string;
+  isOnline: boolean;
+  isVerified: boolean;
+  joinDate: string;
+  privacySettings?: PrivacySettings;
+}
+
+export interface PortfolioItem {
+  id: string;
+  title: string;
+  description: string;
+  image?: string;
+  url?: string;
+  tags: string[];
+}
+
+export interface PrivacySettings {
+  allowMessagesFrom: 'everyone' | 'followers' | 'none';
+  showLastOnline: boolean;
+  showEmail: boolean;
+  showPhone: boolean;
 }
 
 export interface Comment {
@@ -93,10 +123,58 @@ export const initializeData = () => {
   
   if (users.length === 0) {
     const sampleUsers: User[] = [
-      { id: 'u1', name: 'আয়েশা রহমান', email: 'ayesha@example.com', nidMasked: '****1234', trustScore: 85 },
-      { id: 'u2', name: 'রফিকুল ইসলাম', email: 'rafiq@example.com', nidMasked: '****6789', trustScore: 72 },
-      { id: 'u3', name: 'Sarah Ahmed', email: 'sarah@example.com', nidMasked: '****5678', trustScore: 90 },
-      { id: 'u4', name: 'মোহাম্মদ হাসান', email: 'hasan@example.com', nidMasked: '****9876', trustScore: 68 }
+      { 
+        id: 'u1', 
+        name: 'আয়েশা রহমান', 
+        email: 'ayesha@example.com', 
+        nidMasked: '****1234', 
+        trustScore: 85,
+        followers: 124,
+        following: 89,
+        achievements: ['trusted_member', 'top_contributor'],
+        isOnline: true,
+        isVerified: true,
+        joinDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
+      },
+      { 
+        id: 'u2', 
+        name: 'রফিকুল ইসলাম', 
+        email: 'rafiq@example.com', 
+        nidMasked: '****6789', 
+        trustScore: 72,
+        followers: 67,
+        following: 45,
+        achievements: ['early_adopter'],
+        isOnline: false,
+        isVerified: true,
+        joinDate: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000).toISOString()
+      },
+      { 
+        id: 'u3', 
+        name: 'Sarah Ahmed', 
+        email: 'sarah@example.com', 
+        nidMasked: '****5678', 
+        trustScore: 90,
+        followers: 201,
+        following: 156,
+        achievements: ['verified_educator', 'popular_creator', 'community_leader'],
+        isOnline: true,
+        isVerified: true,
+        joinDate: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString()
+      },
+      { 
+        id: 'u4', 
+        name: 'মোহাম্মদ হাসান', 
+        email: 'hasan@example.com', 
+        nidMasked: '****9876', 
+        trustScore: 68,
+        followers: 23,
+        following: 12,
+        achievements: ['helpful_member'],
+        isOnline: false,
+        isVerified: false,
+        joinDate: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString()
+      }
     ];
     save(STORAGE.USERS, sampleUsers);
   }
