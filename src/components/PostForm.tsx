@@ -83,6 +83,7 @@ export const PostForm = ({ user, onPostCreated }: PostFormProps) => {
         content: content.trim(),
         images: images.length > 0 ? images : undefined,
         community,
+        postType: 'text',
         createdAt: new Date().toISOString(),
         likes: 0,
         comments: []

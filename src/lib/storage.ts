@@ -60,9 +60,34 @@ export interface Post {
   content: string;
   images?: string[];
   community: string;
+  postType: 'text' | 'image' | 'video' | 'poll' | 'event' | 'job';
+  location?: string;
+  hashtags?: string[];
+  mentions?: string[];
   createdAt: string;
   likes: number;
+  dislikes?: number;
   comments: Comment[];
+  isEvent?: boolean;
+  eventDetails?: {
+    title: string;
+    date: string;
+    location: string;
+    description: string;
+  };
+  isJob?: boolean;
+  jobDetails?: {
+    title: string;
+    budget: string;
+    deadline: string;
+    skills: string[];
+    description: string;
+  };
+  pollOptions?: {
+    option: string;
+    votes: number;
+  }[];
+  isDraft?: boolean;
 }
 
 export interface Message {
@@ -186,6 +211,7 @@ export const initializeData = () => {
         author: { id: 'u1', name: 'আয়েশা রহমান' },
         content: 'শহরের প্রধান সড়কে বড় গর্ত রয়েছে। সিটি কর্পোরেশনকে জানানো প্রয়োজন।',
         community: 'ward-1',
+        postType: 'text',
         createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
         likes: 12,
         comments: []
@@ -195,6 +221,7 @@ export const initializeData = () => {
         author: { id: 'u3', name: 'Sarah Ahmed' },
         content: 'Python শেখার জন্য কোন অনলাইন কোর্স সবচেয়ে ভালো? শুরুতে কি দিয়ে শুরু করা উচিত?',
         community: 'global',
+        postType: 'text',
         createdAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
         likes: 8,
         comments: []
@@ -204,6 +231,7 @@ export const initializeData = () => {
         author: { id: 'u2', name: 'রফিকুল ইসলাম' },
         content: 'স্থানীয় লাইব্রেরিতে নতুন বই এসেছে। কমিউনিটির সবাই ব্যবহার করতে পারেন।',
         community: 'ward-2',
+        postType: 'text',
         createdAt: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
         likes: 15,
         comments: []
