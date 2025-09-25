@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { User, Post, Comment, STORAGE, save, load, initializeData } from "@/lib/storage";
 import { BottomNavigation } from "@/components/BottomNavigation";
+import { LeftSidebar } from "@/components/LeftSidebar";
 import { Login } from "@/components/Login";
 
 interface AppLayoutProps {
@@ -17,6 +18,8 @@ interface AppLayoutProps {
     onAddComment: (postId: string, content: string) => void;
     onLikeComment: (commentId: string) => void;
     onUpdateProfile: (user: User) => void;
+    onCreatePost?: () => void;
+    registerCreatePostTrigger?: (trigger: () => void) => void;
   }) => React.ReactNode;
 }
 
@@ -25,6 +28,7 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
   const [users, setUsers] = useState<User[]>([]);
   const [posts, setPosts] = useState<Post[]>([]);
   const [comments, setComments] = useState<Comment[]>([]);
+  const [createPostTrigger, setCreatePostTrigger] = useState<(() => void) | null>(null);
 
   useEffect(() => {
     initializeData();
@@ -171,6 +175,17 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
     save(STORAGE.POSTS, updatedPosts);
   };
 
+  const handleCreatePost = () => {
+    // Trigger the child component's create post function
+    if (createPostTrigger) {
+      createPostTrigger();
+    }
+  };
+
+  const registerCreatePostTrigger = (trigger: () => void) => {
+    setCreatePostTrigger(() => trigger);
+  };
+
   if (!currentUser) {
     return (
       <Login 
@@ -182,21 +197,30 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
   }
 
   return (
-    <div className="relative min-h-screen pb-20">
-      {children({
-        currentUser,
-        users,
-        posts,
-        comments,
-        onSignOut: handleSignOut,
-        onLogin: handleLogin,
-        onRegister: handleRegister,
-        onPostCreated: handlePostCreated,
-        onLikePost: handleLikePost,
-        onAddComment: handleAddComment,
-        onLikeComment: handleLikeComment,
-        onUpdateProfile: handleUpdateProfile,
-      })}
+    <div className="relative min-h-screen">
+      <LeftSidebar onCreatePost={handleCreatePost} />
+      
+      {/* Main content area */}
+      <div className="lg:ml-64 min-h-screen pb-20 lg:pb-0">
+        {children({
+          currentUser,
+          users,
+          posts,
+          comments,
+          onSignOut: handleSignOut,
+          onLogin: handleLogin,
+          onRegister: handleRegister,
+          onPostCreated: handlePostCreated,
+          onLikePost: handleLikePost,
+          onAddComment: handleAddComment,
+          onLikeComment: handleLikeComment,
+          onUpdateProfile: handleUpdateProfile,
+          onCreatePost: handleCreatePost,
+          registerCreatePostTrigger,
+        })}
+      </div>
+      
+      {/* Mobile bottom navigation */}
       <BottomNavigation />
     </div>
   );

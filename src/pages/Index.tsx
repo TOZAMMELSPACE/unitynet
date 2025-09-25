@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { EnhancedPostForm } from "@/components/EnhancedPostForm";
 import { EnhancedFeed } from "@/components/EnhancedFeed";
@@ -22,6 +22,8 @@ interface IndexProps {
   onLikePost: (postId: string) => void;
   onAddComment: (postId: string, content: string) => void;
   onLikeComment: (commentId: string) => void;
+  onCreatePost?: () => void;
+  registerCreatePostTrigger?: (trigger: () => void) => void;
 }
 
 const Index = ({
@@ -33,9 +35,18 @@ const Index = ({
   onLikePost,
   onAddComment,
   onLikeComment,
+  onCreatePost,
+  registerCreatePostTrigger,
 }: IndexProps) => {
   const [showPostForm, setShowPostForm] = useState(false);
   const [selectedPostType, setSelectedPostType] = useState<'text' | 'image' | 'video' | 'poll' | 'event' | 'job'>('text');
+
+  // Connect sidebar create post button to show post form
+  useEffect(() => {
+    if (registerCreatePostTrigger) {
+      registerCreatePostTrigger(() => handleCreatePost('text'));
+    }
+  }, [registerCreatePostTrigger]);
 
   const handleCreatePost = (type: 'text' | 'image' | 'video' | 'poll' | 'event' | 'job') => {
     setSelectedPostType(type);
