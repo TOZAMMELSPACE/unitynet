@@ -55,6 +55,12 @@ const Index = ({
     // In a real app, this would update the poll option votes
     console.log('Vote on poll:', postId, 'option:', optionIndex);
   };
+
+  const handleSearch = (query: string) => {
+    // In a real app, this would filter posts based on search query
+    console.log('Search query:', query);
+    // For now, we can show filtered results
+  };
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-6 max-w-7xl">
@@ -62,6 +68,7 @@ const Index = ({
           currentUser={currentUser} 
           onSignOut={onSignOut}
           onCreatePost={() => handleCreatePost('text')}
+          onSearch={handleSearch}
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
