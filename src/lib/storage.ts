@@ -2,7 +2,8 @@
 export interface User {
   id: string;
   name: string;
-  username?: string;
+  username: string;
+  phone: string;
   email?: string;
   nidMasked: string;
   profileImage?: string;
@@ -150,7 +151,9 @@ export const initializeData = () => {
     const sampleUsers: User[] = [
       { 
         id: 'u1', 
-        name: 'আয়েশা রহমান', 
+        name: 'আয়েশা রহমান',
+        username: 'ayesha123',
+        phone: '+8801712345678',
         email: 'ayesha@example.com', 
         nidMasked: '****1234', 
         trustScore: 85,
@@ -163,7 +166,9 @@ export const initializeData = () => {
       },
       { 
         id: 'u2', 
-        name: 'রফিকুল ইসলাম', 
+        name: 'রফিকুল ইসলাম',
+        username: 'rafiq789',
+        phone: '+8801898765432',
         email: 'rafiq@example.com', 
         nidMasked: '****6789', 
         trustScore: 72,
@@ -176,7 +181,9 @@ export const initializeData = () => {
       },
       { 
         id: 'u3', 
-        name: 'Sarah Ahmed', 
+        name: 'Sarah Ahmed',
+        username: 'sarah456',
+        phone: '+8801611223344',
         email: 'sarah@example.com', 
         nidMasked: '****5678', 
         trustScore: 90,
@@ -189,7 +196,9 @@ export const initializeData = () => {
       },
       { 
         id: 'u4', 
-        name: 'মোহাম্মদ হাসান', 
+        name: 'মোহাম্মদ হাসান',
+        username: 'hasan999',
+        phone: '+8801555667788',
         email: 'hasan@example.com', 
         nidMasked: '****9876', 
         trustScore: 68,
