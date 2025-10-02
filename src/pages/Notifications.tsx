@@ -1,6 +1,7 @@
 import { Header } from "@/components/Header";
 import { User } from "@/lib/storage";
 import { Bell, Heart, MessageCircle, UserPlus } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface NotificationsProps {
   currentUser: User | null;
@@ -55,12 +56,32 @@ export default function Notifications({ currentUser, onSignOut }: NotificationsP
       <main className="container mx-auto px-4 max-w-2xl">
         {/* Page Heading with Topics */}
         <div className="card-enhanced p-4 mb-6">
-          <h1 className="text-2xl font-bold mb-2">
+          <h1 className="text-2xl font-bold mb-3">
             <span className="bg-gradient-hero bg-clip-text text-transparent">Notifications | নোটিফিকেশন</span>
           </h1>
-          <p className="text-sm text-muted-foreground">
-            Alerts, Mentions, Reactions, Likes, Comments, Follows, Activity Updates
-          </p>
+          <div className="flex flex-wrap gap-2">
+            <Button variant="secondary" size="sm" className="text-xs">
+              Alerts
+            </Button>
+            <Button variant="secondary" size="sm" className="text-xs">
+              Mentions
+            </Button>
+            <Button variant="secondary" size="sm" className="text-xs">
+              Reactions
+            </Button>
+            <Button variant="secondary" size="sm" className="text-xs">
+              Likes
+            </Button>
+            <Button variant="secondary" size="sm" className="text-xs">
+              Comments
+            </Button>
+            <Button variant="secondary" size="sm" className="text-xs">
+              Follows
+            </Button>
+            <Button variant="secondary" size="sm" className="text-xs">
+              Activity Updates
+            </Button>
+          </div>
         </div>
 
         <div className="space-y-4">

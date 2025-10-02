@@ -9,6 +9,7 @@ import { FloatingActionButton } from "@/components/FloatingActionButton";
 import { LocalEvents } from "@/components/LocalEvents";
 import { JobBoard } from "@/components/JobBoard";
 import { GamificationPanel } from "@/components/GamificationPanel";
+import { Button } from "@/components/ui/button";
 import { User, Post } from "@/lib/storage";
 
 interface IndexProps {
@@ -84,12 +85,26 @@ const Index = ({
 
         {/* Page Heading with Topics */}
         <div className="card-enhanced p-4 mb-6">
-          <h1 className="text-2xl font-bold mb-2">
+          <h1 className="text-2xl font-bold mb-3">
             <span className="bg-gradient-hero bg-clip-text text-transparent">Home | হোম</span>
           </h1>
-          <p className="text-sm text-muted-foreground">
-            Dashboard, Recent Updates, Suggested Content, Community Feed, Events & Jobs
-          </p>
+          <div className="flex flex-wrap gap-2">
+            <Button variant="secondary" size="sm" className="text-xs">
+              Dashboard
+            </Button>
+            <Button variant="secondary" size="sm" className="text-xs">
+              Recent Updates
+            </Button>
+            <Button variant="secondary" size="sm" className="text-xs">
+              Suggested Content
+            </Button>
+            <Button variant="secondary" size="sm" className="text-xs">
+              Community Feed
+            </Button>
+            <Button variant="secondary" size="sm" className="text-xs">
+              Events & Jobs
+            </Button>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">

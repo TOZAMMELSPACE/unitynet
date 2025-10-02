@@ -2,6 +2,7 @@ import { Header } from "@/components/Header";
 import { User } from "@/lib/storage";
 import { Search, TrendingUp, Hash, Users, BookOpen } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface ExploreProps {
@@ -42,12 +43,26 @@ export default function Explore({ currentUser, onSignOut }: ExploreProps) {
       <main className="container mx-auto px-4 max-w-2xl">
         {/* Page Heading with Topics */}
         <div className="card-enhanced p-4 mb-6">
-          <h1 className="text-2xl font-bold mb-2">
+          <h1 className="text-2xl font-bold mb-3">
             <span className="bg-gradient-hero bg-clip-text text-transparent">Explore | এক্সপ্লোর</span>
           </h1>
-          <p className="text-sm text-muted-foreground">
-            Trending Topics, Search Posts & Users, Discover New People, Categories, Hashtags
-          </p>
+          <div className="flex flex-wrap gap-2">
+            <Button variant="secondary" size="sm" className="text-xs">
+              Trending Topics
+            </Button>
+            <Button variant="secondary" size="sm" className="text-xs">
+              Search Posts & Users
+            </Button>
+            <Button variant="secondary" size="sm" className="text-xs">
+              Discover New People
+            </Button>
+            <Button variant="secondary" size="sm" className="text-xs">
+              Categories
+            </Button>
+            <Button variant="secondary" size="sm" className="text-xs">
+              Hashtags
+            </Button>
+          </div>
         </div>
 
         <div className="mb-6">
