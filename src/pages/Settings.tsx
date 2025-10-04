@@ -64,35 +64,6 @@ export default function Settings({ currentUser, onSignOut }: SettingsProps) {
       <Header currentUser={currentUser} onSignOut={onSignOut} />
       
       <main className="container mx-auto px-4 max-w-2xl">
-        {/* Page Heading with Topics */}
-        <div className="card-enhanced p-4 mb-6">
-          <h1 className="text-2xl font-bold mb-3">
-            <span className="bg-gradient-hero bg-clip-text text-transparent">Settings | সেটিংস</span>
-          </h1>
-          <div className="flex flex-wrap gap-2">
-            <Button variant="secondary" size="sm" className="text-xs">
-              Privacy
-            </Button>
-            <Button variant="secondary" size="sm" className="text-xs">
-              Security
-            </Button>
-            <Button variant="secondary" size="sm" className="text-xs">
-              Preferences
-            </Button>
-            <Button variant="secondary" size="sm" className="text-xs">
-              Account Control
-            </Button>
-            <Button variant="secondary" size="sm" className="text-xs">
-              Notifications
-            </Button>
-            <Button variant="secondary" size="sm" className="text-xs">
-              Display
-            </Button>
-            <Button variant="secondary" size="sm" className="text-xs">
-              Help & Support
-            </Button>
-          </div>
-        </div>
 
         {/* User Info Card */}
         <div className="card-enhanced p-4 mb-6">

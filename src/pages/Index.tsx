@@ -83,29 +83,6 @@ const Index = ({
           onSearch={handleSearch}
         />
 
-        {/* Page Heading with Topics */}
-        <div className="card-enhanced p-4 mb-6">
-          <h1 className="text-2xl font-bold mb-3">
-            <span className="bg-gradient-hero bg-clip-text text-transparent">Home | হোম</span>
-          </h1>
-          <div className="flex flex-wrap gap-2">
-            <Button variant="secondary" size="sm" className="text-xs">
-              Dashboard
-            </Button>
-            <Button variant="secondary" size="sm" className="text-xs">
-              Recent Updates
-            </Button>
-            <Button variant="secondary" size="sm" className="text-xs">
-              Suggested Content
-            </Button>
-            <Button variant="secondary" size="sm" className="text-xs">
-              Community Feed
-            </Button>
-            <Button variant="secondary" size="sm" className="text-xs">
-              Events & Jobs
-            </Button>
-          </div>
-        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Main Content */}

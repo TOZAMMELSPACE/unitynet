@@ -63,32 +63,6 @@ export default function Groups({ currentUser, onSignOut }: GroupsProps) {
       <Header currentUser={currentUser} onSignOut={onSignOut} />
       
       <main className="container mx-auto px-4 max-w-2xl">
-        {/* Page Heading with Topics */}
-        <div className="card-enhanced p-4 mb-6">
-          <h1 className="text-2xl font-bold mb-3">
-            <span className="bg-gradient-hero bg-clip-text text-transparent">Groups | গ্রুপ</span>
-          </h1>
-          <div className="flex flex-wrap gap-2">
-            <Button variant="secondary" size="sm" className="text-xs">
-              Communities
-            </Button>
-            <Button variant="secondary" size="sm" className="text-xs">
-              Discussions
-            </Button>
-            <Button variant="secondary" size="sm" className="text-xs">
-              Shared Interests
-            </Button>
-            <Button variant="secondary" size="sm" className="text-xs">
-              Public Groups
-            </Button>
-            <Button variant="secondary" size="sm" className="text-xs">
-              Private Groups
-            </Button>
-            <Button variant="secondary" size="sm" className="text-xs">
-              Networking
-            </Button>
-          </div>
-        </div>
 
         <div className="mb-6">
           <div className="flex items-center justify-between mb-4">

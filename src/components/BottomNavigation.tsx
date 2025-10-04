@@ -1,23 +1,25 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { Home, Bell, User, MessageCircle, Search, Users, Settings } from "lucide-react";
-
-const navItems = [
-  { path: "/", icon: Home, label: "Home" },
-  { path: "/notifications", icon: Bell, label: "Notifications" },
-  { path: "/messages", icon: MessageCircle, label: "Messages" },
-  { path: "/explore", icon: Search, label: "Explore" },
-  { path: "/profile", icon: User, label: "Profile" },
-  { path: "/groups", icon: Users, label: "Groups" },
-  { path: "/settings", icon: Settings, label: "Settings" },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export const BottomNavigation = () => {
   const location = useLocation();
+  const { t } = useLanguage();
+
+  const navItems = [
+    { path: "/", icon: Home, labelEn: "Home", labelBn: "হোম" },
+    { path: "/notifications", icon: Bell, labelEn: "Notifications", labelBn: "নোটিফিকেশন" },
+    { path: "/messages", icon: MessageCircle, labelEn: "Messages", labelBn: "মেসেজ" },
+    { path: "/explore", icon: Search, labelEn: "Explore", labelBn: "এক্সপ্লোর" },
+    { path: "/profile", icon: User, labelEn: "Profile", labelBn: "প্রোফাইল" },
+    { path: "/groups", icon: Users, labelEn: "Groups", labelBn: "গ্রুপ" },
+    { path: "/settings", icon: Settings, labelEn: "Settings", labelBn: "সেটিংস" },
+  ];
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-border z-50 lg:hidden">
       <div className="flex justify-around items-center py-2 px-1">
-        {navItems.map(({ path, icon: Icon, label }) => {
+        {navItems.map(({ path, icon: Icon, labelEn, labelBn }) => {
           const isActive = location.pathname === path;
           
           return (
@@ -31,7 +33,9 @@ export const BottomNavigation = () => {
               }`}
             >
               <Icon size={20} />
-              <span className="text-xs mt-1 font-medium">{label}</span>
+              <span className="text-xs mt-1 font-medium">
+                {t(labelEn, labelBn)}
+              </span>
               {/* Notification indicator for Bell icon */}
               {path === "/notifications" && (
                 <div className="absolute -top-1 -right-1 w-2 h-2 bg-destructive rounded-full"></div>

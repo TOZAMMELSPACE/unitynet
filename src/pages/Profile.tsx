@@ -83,35 +83,6 @@ export default function Profile({ currentUser, onSignOut, posts, onUpdateProfile
       <Header currentUser={currentUser} onSignOut={onSignOut} />
       
       <main className="container mx-auto px-4 max-w-4xl">
-        {/* Page Heading with Topics */}
-        <div className="card-enhanced p-4 mb-6">
-          <h1 className="text-2xl font-bold mb-3">
-            <span className="bg-gradient-hero bg-clip-text text-transparent">Profile | প্রোফাইল</span>
-          </h1>
-          <div className="flex flex-wrap gap-2">
-            <Button variant="secondary" size="sm" className="text-xs">
-              User Info
-            </Button>
-            <Button variant="secondary" size="sm" className="text-xs">
-              Posts
-            </Button>
-            <Button variant="secondary" size="sm" className="text-xs">
-              Activities
-            </Button>
-            <Button variant="secondary" size="sm" className="text-xs">
-              Followers & Following
-            </Button>
-            <Button variant="secondary" size="sm" className="text-xs">
-              Portfolio
-            </Button>
-            <Button variant="secondary" size="sm" className="text-xs">
-              Achievements
-            </Button>
-            <Button variant="secondary" size="sm" className="text-xs">
-              Media
-            </Button>
-          </div>
-        </div>
 
         {/* Cover Image & Profile Header */}
         <div className="relative mb-6">

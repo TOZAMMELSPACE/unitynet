@@ -1,16 +1,8 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { Home, Bell, User, MessageCircle, Search, Users, Settings, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-const navItems = [
-  { path: "/", icon: Home, label: "Home", bengaliLabel: "হোম" },
-  { path: "/explore", icon: Search, label: "Explore", bengaliLabel: "এক্সপ্লোর" },
-  { path: "/notifications", icon: Bell, label: "Notifications", bengaliLabel: "নোটিফিকেশন" },
-  { path: "/messages", icon: MessageCircle, label: "Messages", bengaliLabel: "মেসেজ" },
-  { path: "/groups", icon: Users, label: "Groups", bengaliLabel: "গ্রুপ" },
-  { path: "/profile", icon: User, label: "Profile", bengaliLabel: "প্রোফাইল" },
-  { path: "/settings", icon: Settings, label: "Settings", bengaliLabel: "সেটিংস" },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
+import { LanguageToggle } from "@/components/LanguageToggle";
 
 interface LeftSidebarProps {
   onCreatePost?: () => void;
@@ -18,6 +10,17 @@ interface LeftSidebarProps {
 
 export const LeftSidebar = ({ onCreatePost }: LeftSidebarProps) => {
   const location = useLocation();
+  const { t } = useLanguage();
+
+  const navItems = [
+    { path: "/", icon: Home, labelEn: "Home", labelBn: "হোম" },
+    { path: "/explore", icon: Search, labelEn: "Explore", labelBn: "এক্সপ্লোর" },
+    { path: "/notifications", icon: Bell, labelEn: "Notifications", labelBn: "নোটিফিকেশন" },
+    { path: "/messages", icon: MessageCircle, labelEn: "Messages", labelBn: "মেসেজ" },
+    { path: "/groups", icon: Users, labelEn: "Groups", labelBn: "গ্রুপ" },
+    { path: "/profile", icon: User, labelEn: "Profile", labelBn: "প্রোফাইল" },
+    { path: "/settings", icon: Settings, labelEn: "Settings", labelBn: "সেটিংস" },
+  ];
 
   return (
     <aside className="hidden lg:flex fixed left-0 top-0 h-screen w-64 bg-card border-r border-border z-40 flex-col">
@@ -34,7 +37,7 @@ export const LeftSidebar = ({ onCreatePost }: LeftSidebarProps) => {
         </div>
 
         <nav className="space-y-2">
-          {navItems.map(({ path, icon: Icon, label, bengaliLabel }) => {
+          {navItems.map(({ path, icon: Icon, labelEn, labelBn }) => {
             const isActive = location.pathname === path;
             
             return (
@@ -51,10 +54,9 @@ export const LeftSidebar = ({ onCreatePost }: LeftSidebarProps) => {
                   size={24} 
                   className={`${isActive ? "text-primary" : "group-hover:text-foreground"}`} 
                 />
-                <div className="flex flex-col">
-                  <span className="font-medium text-sm">{label}</span>
-                  <span className="text-xs text-bengali opacity-75">{bengaliLabel}</span>
-                </div>
+                <span className="font-medium text-sm">
+                  {t(labelEn, labelBn)}
+                </span>
                 {/* Notification indicator for Bell icon */}
                 {path === "/notifications" && (
                   <div className="ml-auto w-2 h-2 bg-destructive rounded-full"></div>
@@ -72,15 +74,18 @@ export const LeftSidebar = ({ onCreatePost }: LeftSidebarProps) => {
               className="w-full btn-hero flex items-center justify-center gap-2 py-3 shadow-elegant hover:shadow-glow transition-all duration-300"
             >
               <Plus className="h-5 w-5" />
-              <span className="font-semibold text-bengali">নতুন পোস্ট</span>
+              <span className="font-semibold">
+                {t("New Post", "নতুন পোস্ট")}
+              </span>
             </Button>
           </div>
         )}
       </div>
 
-      {/* Bottom section with branding */}
-      <div className="mt-auto p-6 border-t border-border">
-        <p className="text-xs text-muted-foreground text-center text-bengali">
+      {/* Bottom section with language toggle and branding */}
+      <div className="mt-auto p-6 border-t border-border space-y-3">
+        <LanguageToggle />
+        <p className="text-xs text-muted-foreground text-center">
           Trust • Learn • Unite
         </p>
       </div>
