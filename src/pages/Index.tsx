@@ -114,10 +114,11 @@ const Index = ({
             </div>
 
             {/* Post Form */}
-            {(showPostForm || !currentUser) && currentUser && (
+            {showPostForm && currentUser && (
               <div id="post-form">
                 <EnhancedPostForm 
-                  user={currentUser} 
+                  user={currentUser}
+                  initialPostType={selectedPostType}
                   onPostCreated={(post) => {
                     onPostCreated(post);
                     setShowPostForm(false);

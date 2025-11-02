@@ -28,12 +28,13 @@ import { toast } from "@/hooks/use-toast";
 interface EnhancedPostFormProps {
   user: User;
   onPostCreated: (post: Post) => void;
+  initialPostType?: 'text' | 'image' | 'video' | 'poll' | 'event' | 'job';
 }
 
-export const EnhancedPostForm = ({ user, onPostCreated }: EnhancedPostFormProps) => {
+export const EnhancedPostForm = ({ user, onPostCreated, initialPostType = 'text' }: EnhancedPostFormProps) => {
   const [content, setContent] = useState("");
   const [community, setCommunity] = useState("global");
-  const [postType, setPostType] = useState<'text' | 'image' | 'video' | 'poll' | 'event' | 'job'>('text');
+  const [postType, setPostType] = useState<'text' | 'image' | 'video' | 'poll' | 'event' | 'job'>(initialPostType);
   const [images, setImages] = useState<string[]>([]);
   const [location, setLocation] = useState("");
   const [hashtags, setHashtags] = useState<string[]>([]);
