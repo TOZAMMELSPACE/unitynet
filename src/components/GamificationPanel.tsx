@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { User } from "@/lib/storage";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { 
   Trophy, 
   Star, 
@@ -19,12 +22,19 @@ interface GamificationPanelProps {
 }
 
 export const GamificationPanel = ({ user, users }: GamificationPanelProps) => {
+  const [showFollowers, setShowFollowers] = useState(false);
+  
   if (!user) return null;
 
   // Calculate user stats
   const userRank = users
     .sort((a, b) => b.trustScore - a.trustScore)
     .findIndex(u => u.id === user.id) + 1;
+  
+  // Get followers list (mock data - in real app would come from database)
+  const followersList = users
+    .filter(u => u.id !== user.id)
+    .slice(0, Math.min(user.followers, 10));
 
   const nextLevel = Math.ceil(user.trustScore / 20) * 20;
   const progressToNextLevel = ((user.trustScore % 20) / 20) * 100;
@@ -177,14 +187,18 @@ export const GamificationPanel = ({ user, users }: GamificationPanelProps) => {
 
         {/* Quick Stats */}
         <div className="grid grid-cols-2 gap-3 pt-3 border-t border-border">
-          <div className="text-center">
+          <Button 
+            variant="ghost" 
+            className="h-auto p-3 flex flex-col items-center hover:bg-primary/5"
+            onClick={() => setShowFollowers(true)}
+          >
             <div className="flex items-center justify-center gap-1 mb-1">
               <Users className="w-3 h-3 text-muted-foreground" />
               <span className="text-xs text-muted-foreground">ফলোয়ার</span>
             </div>
             <div className="font-semibold">{user.followers}</div>
-          </div>
-          <div className="text-center">
+          </Button>
+          <div className="text-center p-3">
             <div className="flex items-center justify-center gap-1 mb-1">
               <Calendar className="w-3 h-3 text-muted-foreground" />
               <span className="text-xs text-muted-foreground">সদস্য হওয়ার তারিখ</span>
@@ -195,6 +209,54 @@ export const GamificationPanel = ({ user, users }: GamificationPanelProps) => {
           </div>
         </div>
       </CardContent>
+
+      {/* Followers Dialog */}
+      <Dialog open={showFollowers} onOpenChange={setShowFollowers}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Users className="w-5 h-5" />
+              ফলোয়ার ({user.followers})
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3 max-h-[400px] overflow-y-auto">
+            {followersList.length > 0 ? (
+              followersList.map((follower) => (
+                <div 
+                  key={follower.id}
+                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors"
+                >
+                  {follower.profileImage ? (
+                    <img 
+                      src={follower.profileImage} 
+                      alt={follower.name}
+                      className="w-10 h-10 rounded-full"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-gradient-hero flex items-center justify-center text-white font-semibold">
+                      {follower.name.charAt(0)}
+                    </div>
+                  )}
+                  <div className="flex-1">
+                    <div className="font-medium">{follower.name}</div>
+                    <div className="text-xs text-muted-foreground">
+                      @{follower.username}
+                    </div>
+                  </div>
+                  <Badge variant="secondary" className="text-xs">
+                    {Math.round(follower.trustScore)}
+                  </Badge>
+                </div>
+              ))
+            ) : (
+              <div className="text-center py-8 text-muted-foreground">
+                <Users className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                <p className="text-sm">এখনো কোনো ফলোয়ার নেই</p>
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 };
