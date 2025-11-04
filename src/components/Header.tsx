@@ -1,32 +1,21 @@
 import { User } from "@/lib/storage";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Moon, Sun, Plus, Search } from "lucide-react";
+import { Moon, Sun, Plus } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useState } from "react";
 
 interface HeaderProps {
   currentUser: User | null;
   onSignOut: () => void;
   onCreatePost?: () => void;
-  onSearch?: (query: string) => void;
 }
 
-export const Header = ({ currentUser, onSignOut, onCreatePost, onSearch }: HeaderProps) => {
+export const Header = ({ currentUser, onSignOut, onCreatePost }: HeaderProps) => {
   const { theme, setTheme } = useTheme();
   const { t } = useLanguage();
-  const [searchQuery, setSearchQuery] = useState("");
 
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
-  };
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (onSearch && searchQuery.trim()) {
-      onSearch(searchQuery.trim());
-    }
   };
 
   return (
@@ -106,21 +95,6 @@ export const Header = ({ currentUser, onSignOut, onCreatePost, onSearch }: Heade
             এই প্ল্যাটফর্মে আপনি স্থানীয় কমিউনিটির সাথে যুক্ত হতে পারেন, জ্ঞান শেয়ার করতে পারেন এবং নতুন কিছু শিখতে পারেন।
           </p>
         </div>
-
-        {/* Search Bar - Full Width */}
-        {onSearch && (
-          <div className="w-full">
-            <form onSubmit={handleSearch} className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-              <Input
-                placeholder={t("Search... (posts, users, topics)", "খুঁজুন... (পোস্ট, ইউজার, টপিক)")}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-muted/20 border-primary/20 focus:border-primary/40 transition-all w-full text-sm lg:text-base"
-              />
-            </form>
-          </div>
-        )}
       </div>
     </header>
   );

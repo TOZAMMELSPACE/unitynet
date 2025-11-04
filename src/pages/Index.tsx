@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
+import { FeedFilter } from "@/components/FeedFilter";
 import { EnhancedPostForm } from "@/components/EnhancedPostForm";
 import { EnhancedFeed } from "@/components/EnhancedFeed";
 import { UsersList } from "@/components/UsersList";
@@ -72,10 +73,14 @@ const Index = ({
     console.log('Vote on poll:', postId, 'option:', optionIndex);
   };
 
-  const handleSearch = (query: string) => {
-    // In a real app, this would filter posts based on search query
-    console.log('Search query:', query);
-    // For now, we can show filtered results
+  const handleFilterChange = (filters: {
+    search: string;
+    community: string;
+    postType: string;
+    sortBy: string;
+  }) => {
+    // In a real app, this would filter posts based on filters
+    console.log('Filter change:', filters);
   };
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-muted/10 to-background">
@@ -84,8 +89,9 @@ const Index = ({
           currentUser={currentUser} 
           onSignOut={onSignOut}
           onCreatePost={() => handleCreatePost('text')}
-          onSearch={handleSearch}
         />
+
+        <FeedFilter onFilterChange={handleFilterChange} />
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6 mt-4 sm:mt-6">
           {/* Main Content */}
