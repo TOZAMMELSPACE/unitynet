@@ -99,6 +99,16 @@ export const Header = ({ currentUser, onSignOut, onCreatePost, onSearch }: Heade
             </form>
           </div>
         )}
+
+        {/* Welcome Section */}
+        <div className="pt-3 border-t border-primary/10">
+          <h1 className="text-xl lg:text-2xl font-bold mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            Welcome to UnityNet
+          </h1>
+          <p className="text-muted-foreground text-bengali text-sm lg:text-base leading-relaxed">
+            এই প্ল্যাটফর্মে আপনি স্থানীয় কমিউনিটির সাথে যুক্ত হতে পারেন, জ্ঞান শেয়ার করতে পারেন এবং নতুন কিছু শিখতে পারেন।
+          </p>
+        </div>
       </div>
     </header>
   );
