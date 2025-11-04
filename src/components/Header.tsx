@@ -32,8 +32,8 @@ export const Header = ({ currentUser, onSignOut, onCreatePost, onSearch }: Heade
   return (
     <header className="card-enhanced p-3 lg:p-4 mb-4 lg:mb-6">
       <div className="flex flex-col gap-3 lg:gap-4">
-        {/* Top Row: Create Post + Theme + Profile */}
-        <div className="flex justify-between items-center gap-2">
+        {/* Top Row: Create Post + Welcome + Theme + Profile + Sign Out */}
+        <div className="flex flex-wrap items-center gap-2 lg:gap-3">
           {/* Create Post Button */}
           {currentUser && onCreatePost && (
             <Button
@@ -48,7 +48,18 @@ export const Header = ({ currentUser, onSignOut, onCreatePost, onSearch }: Heade
             </Button>
           )}
           
+          {/* Welcome Text */}
+          <div className="hidden md:flex flex-col flex-1 min-w-0">
+            <h1 className="text-base lg:text-lg font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent truncate">
+              Welcome to UnityNet
+            </h1>
+            <p className="text-xs text-muted-foreground text-bengali truncate">
+              এই প্ল্যাটফর্মে আপনি স্থানীয় কমিউনিটির সাথে যুক্ত হতে পারেন, জ্ঞান শেয়ার করতে পারেন এবং নতুন কিছু শিখতে পারেন।
+            </p>
+          </div>
+          
           <div className="flex items-center gap-2 lg:gap-3 ml-auto">
+            {/* Dark Mode Toggle */}
             <Button
               variant="ghost"
               size="sm"
@@ -60,8 +71,9 @@ export const Header = ({ currentUser, onSignOut, onCreatePost, onSearch }: Heade
               <span className="sr-only">Toggle theme</span>
             </Button>
             
+            {/* Profile and Sign Out */}
             {currentUser ? (
-              <div className="flex items-center gap-2 lg:gap-3">
+              <>
                 <div className="text-right bg-gradient-to-r from-primary/15 to-accent/20 px-2 py-2 lg:px-4 lg:py-3 rounded-xl border border-primary/30 shadow-elegant hover:shadow-glow transition-all duration-300 backdrop-blur-sm">
                   <div className="font-bold text-primary text-sm lg:text-lg truncate max-w-[100px] lg:max-w-none">{currentUser.name}</div>
                   <div className="trust-score text-xs lg:text-sm font-semibold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent whitespace-nowrap">
@@ -76,7 +88,7 @@ export const Header = ({ currentUser, onSignOut, onCreatePost, onSearch }: Heade
                 >
                   {t("Sign Out", "সাইন আউট")}
                 </Button>
-              </div>
+              </>
             ) : (
               <div className="text-muted-foreground text-sm">
                 {t("Sign In", "সাইন ইন করুন")}
@@ -85,7 +97,17 @@ export const Header = ({ currentUser, onSignOut, onCreatePost, onSearch }: Heade
           </div>
         </div>
 
-        {/* Search Bar - Full Width on Mobile */}
+        {/* Welcome Text - Mobile Only */}
+        <div className="md:hidden w-full pt-2 border-t border-primary/10">
+          <h1 className="text-lg font-bold mb-1 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            Welcome to UnityNet
+          </h1>
+          <p className="text-xs text-muted-foreground text-bengali leading-relaxed">
+            এই প্ল্যাটফর্মে আপনি স্থানীয় কমিউনিটির সাথে যুক্ত হতে পারেন, জ্ঞান শেয়ার করতে পারেন এবং নতুন কিছু শিখতে পারেন।
+          </p>
+        </div>
+
+        {/* Search Bar - Full Width */}
         {onSearch && (
           <div className="w-full">
             <form onSubmit={handleSearch} className="relative">
@@ -99,16 +121,6 @@ export const Header = ({ currentUser, onSignOut, onCreatePost, onSearch }: Heade
             </form>
           </div>
         )}
-
-        {/* Welcome Section */}
-        <div className="pt-3 border-t border-primary/10">
-          <h1 className="text-xl lg:text-2xl font-bold mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            Welcome to UnityNet
-          </h1>
-          <p className="text-muted-foreground text-bengali text-sm lg:text-base leading-relaxed">
-            এই প্ল্যাটফর্মে আপনি স্থানীয় কমিউনিটির সাথে যুক্ত হতে পারেন, জ্ঞান শেয়ার করতে পারেন এবং নতুন কিছু শিখতে পারেন।
-          </p>
-        </div>
       </div>
     </header>
   );
