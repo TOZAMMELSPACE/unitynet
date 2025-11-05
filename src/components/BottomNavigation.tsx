@@ -14,6 +14,11 @@ export const BottomNavigation = () => {
     { path: "/unity-note", icon: Coins, labelEn: "Note", labelBn: "নোট" },
     { path: "/impact-report", icon: BarChart3, labelEn: "Impact", labelBn: "প্রভাব" },
     { path: "/notifications", icon: Bell, labelEn: "Alerts", labelBn: "সতর্কতা" },
+    { path: "/messages", icon: MessageCircle, labelEn: "Messages", labelBn: "মেসেজ" },
+    { path: "/groups", icon: Users, labelEn: "Groups", labelBn: "গ্রুপ" },
+    { path: "/profile", icon: User, labelEn: "Profile", labelBn: "প্রোফাইল" },
+    { path: "/settings", icon: Settings, labelEn: "Settings", labelBn: "সেটিংস" },
+    { path: "/unity-government", icon: Building2, labelEn: "Government", labelBn: "সরকার" },
   ];
 
   const handleHomeClick = () => {
