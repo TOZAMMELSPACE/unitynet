@@ -19,7 +19,6 @@ import {
 } from "lucide-react";
 import { CommentSection } from "@/components/CommentSection";
 import { ShareButton } from "@/components/ShareButton";
-import { FeedFilter } from "@/components/FeedFilter";
 
 interface EnhancedFeedProps {
   posts: Post[];
@@ -102,13 +101,10 @@ export const EnhancedFeed = ({
 
   if (posts.length === 0) {
     return (
-      <div className="space-y-6">
-        <FeedFilter onFilterChange={setFilters} />
-        <div className="card-enhanced p-8 text-center">
-          <div className="text-muted-foreground">
-            <MessageCircle className="w-12 h-12 mx-auto mb-4 opacity-50" />
-            <p className="text-bengali">কোন পোস্ট নেই। প্রথম পোস্ট করুন!</p>
-          </div>
+      <div className="card-enhanced p-8 text-center">
+        <div className="text-muted-foreground">
+          <MessageCircle className="w-12 h-12 mx-auto mb-4 opacity-50" />
+          <p className="text-bengali">কোন পোস্ট নেই। প্রথম পোস্ট করুন!</p>
         </div>
       </div>
     );
@@ -214,11 +210,8 @@ export const EnhancedFeed = ({
   };
 
   return (
-    <div className="space-y-6">
-      <FeedFilter onFilterChange={setFilters} />
-      
-      <div className="space-y-4">
-        {filteredAndSortedPosts.map((post) => (
+    <div className="space-y-4">
+      {filteredAndSortedPosts.map((post) => (
           <article key={post.id} className="card-enhanced p-6 hover:shadow-large transition-all duration-300">
             <div className="flex justify-between items-start mb-4">
               <div className="flex items-center gap-3">
@@ -371,20 +364,19 @@ export const EnhancedFeed = ({
           </article>
         ))}
 
-        {filteredAndSortedPosts.length === 0 && (
-          <div className="card-enhanced p-8 text-center">
-            <div className="text-muted-foreground">
-              <MessageCircle className="w-12 h-12 mx-auto mb-4 opacity-50" />
-              <p className="text-bengali">
-                {filters.search || filters.community !== "all" || filters.postType !== "all" 
-                  ? "এই ফিল্টারে কোন পোস্ট পাওয়া যায়নি।" 
-                  : "কোন পোস্ট নেই। প্রথম পোস্ট করুন!"
-                }
-              </p>
-            </div>
+      {filteredAndSortedPosts.length === 0 && (
+        <div className="card-enhanced p-8 text-center">
+          <div className="text-muted-foreground">
+            <MessageCircle className="w-12 h-12 mx-auto mb-4 opacity-50" />
+            <p className="text-bengali">
+              {filters.search || filters.community !== "all" || filters.postType !== "all" 
+                ? "এই ফিল্টারে কোন পোস্ট পাওয়া যায়নি।" 
+                : "কোন পোস্ট নেই। প্রথম পোস্ট করুন!"
+              }
+            </p>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
