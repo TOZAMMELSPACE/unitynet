@@ -30,10 +30,11 @@ export const BottomNavigation = () => {
     }
   };
 
-  // Calculate position for each item in a 360-degree circle
+  // Calculate position for each item in a 270-degree arc (avoiding bottom)
   const getItemPosition = (index: number) => {
     const totalItems = navItems.length;
-    const angle = (360 / totalItems) * index - 90; // Start from top and distribute evenly
+    // Distribute items from -135 to +135 degrees (avoiding bottom 90 degrees)
+    const angle = (270 / (totalItems - 1)) * index - 135 - 90; // -225 to -45 degrees
     const radius = 80; // Distance from center (closer to home button)
     const x = Math.cos((angle * Math.PI) / 180) * radius;
     const y = Math.sin((angle * Math.PI) / 180) * radius;
