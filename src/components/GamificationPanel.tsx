@@ -3,8 +3,9 @@ import { User } from "@/lib/storage";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Trophy, 
   Star, 
@@ -13,7 +14,10 @@ import {
   Award,
   TrendingUp,
   Calendar,
-  Users
+  Users,
+  Lock,
+  CheckCircle2,
+  Sparkles
 } from "lucide-react";
 
 interface GamificationPanelProps {
@@ -23,6 +27,7 @@ interface GamificationPanelProps {
 
 export const GamificationPanel = ({ user, users }: GamificationPanelProps) => {
   const [showFollowers, setShowFollowers] = useState(false);
+  const [showAchievements, setShowAchievements] = useState(false);
   
   if (!user) return null;
 
@@ -50,42 +55,90 @@ export const GamificationPanel = ({ user, users }: GamificationPanelProps) => {
       name: 'প্রথম পোস্ট', 
       icon: '🎯', 
       unlocked: true,
-      description: 'আপনার প্রথম পোস্ট করেছেন'
+      description: 'আপনার প্রথম পোস্ট করেছেন',
+      requirement: 1,
+      current: 1,
+      category: 'প্রাথমিক'
     },
     { 
       id: 'trusted_member', 
       name: 'বিশ্বস্ত সদস্য', 
       icon: '🛡️', 
       unlocked: user.trustScore >= 50,
-      description: '৫০+ ট্রাস্ট স্কোর অর্জন'
+      description: '৫০+ ট্রাস্ট স্কোর অর্জন করুন',
+      requirement: 50,
+      current: user.trustScore,
+      category: 'ট্রাস্ট'
     },
     { 
       id: 'community_leader', 
       name: 'কমিউনিটি নেতা', 
       icon: '👑', 
       unlocked: user.trustScore >= 80,
-      description: '৮০+ ট্রাস্ট স্কোর অর্জন'
+      description: '৮০+ ট্রাস্ট স্কোর অর্জন করুন',
+      requirement: 80,
+      current: user.trustScore,
+      category: 'ট্রাস্ট'
     },
     { 
       id: 'popular_creator', 
       name: 'জনপ্রিয় ক্রিয়েটর', 
       icon: '⭐', 
       unlocked: user.followers >= 100,
-      description: '১০০+ ফলোয়ার অর্জন'
+      description: '১০০+ ফলোয়ার অর্জন করুন',
+      requirement: 100,
+      current: user.followers,
+      category: 'সোশ্যাল'
     },
     { 
       id: 'helpful_member', 
       name: 'সহায়ক সদস্য', 
       icon: '🤝', 
       unlocked: user.trustScore >= 30,
-      description: 'কমিউনিটিতে সাহায্য করেছেন'
+      description: '৩০+ ট্রাস্ট স্কোর অর্জন করে কমিউনিটিতে সাহায্য করুন',
+      requirement: 30,
+      current: user.trustScore,
+      category: 'ট্রাস্ট'
     },
     { 
       id: 'early_adopter', 
       name: 'প্রাথমিক ব্যবহারকারী', 
       icon: '🚀', 
       unlocked: true,
-      description: 'প্ল্যাটফর্মের প্রাথমিক সদস্য'
+      description: 'প্ল্যাটফর্মের প্রাথমিক সদস্য',
+      requirement: 1,
+      current: 1,
+      category: 'প্রাথমিক'
+    },
+    { 
+      id: 'top_contributor', 
+      name: 'টপ কন্ট্রিবিউটর', 
+      icon: '🏆', 
+      unlocked: userRank <= 3,
+      description: 'কমিউনিটিতে টপ ৩ এ স্থান করুন',
+      requirement: 3,
+      current: userRank,
+      category: 'র‍্যাঙ্ক'
+    },
+    { 
+      id: 'influencer', 
+      name: 'ইনফ্লুয়েন্সার', 
+      icon: '💎', 
+      unlocked: user.followers >= 500,
+      description: '৫০০+ ফলোয়ার অর্জন করুন',
+      requirement: 500,
+      current: user.followers,
+      category: 'সোশ্যাল'
+    },
+    { 
+      id: 'master', 
+      name: 'মাস্টার', 
+      icon: '⚡', 
+      unlocked: user.trustScore >= 100,
+      description: '১০০ ট্রাস্ট স্কোর অর্জন করুন',
+      requirement: 100,
+      current: user.trustScore,
+      category: 'ট্রাস্ট'
     }
   ];
 
@@ -167,22 +220,45 @@ export const GamificationPanel = ({ user, users }: GamificationPanelProps) => {
           
           <div className="grid grid-cols-3 gap-2">
             {achievements.slice(0, 6).map((achievement) => (
-              <div 
+              <button
                 key={achievement.id}
-                className={`p-2 rounded-lg text-center transition-all ${
+                onClick={() => setShowAchievements(true)}
+                className={`p-2 rounded-lg text-center transition-all hover:scale-105 active:scale-95 relative group ${
                   achievement.unlocked 
-                    ? 'bg-success/10 border border-success/20' 
-                    : 'bg-muted/20 border border-border opacity-50'
+                    ? 'bg-gradient-to-br from-success/20 to-success/10 border border-success/30 shadow-sm' 
+                    : 'bg-muted/30 border border-border/50 opacity-60 hover:opacity-80'
                 }`}
                 title={achievement.description}
               >
-                <div className="text-lg mb-1">{achievement.icon}</div>
+                {achievement.unlocked && (
+                  <div className="absolute -top-1 -right-1 bg-success rounded-full p-0.5">
+                    <CheckCircle2 className="w-2.5 h-2.5 text-white" />
+                  </div>
+                )}
+                {!achievement.unlocked && (
+                  <div className="absolute -top-1 -right-1 bg-muted rounded-full p-0.5 border">
+                    <Lock className="w-2.5 h-2.5 text-muted-foreground" />
+                  </div>
+                )}
+                <div className={`text-lg mb-1 ${achievement.unlocked ? 'animate-pulse' : 'grayscale'}`}>
+                  {achievement.icon}
+                </div>
                 <div className="text-xs font-medium line-clamp-2">
                   {achievement.name}
                 </div>
-              </div>
+              </button>
             ))}
           </div>
+          
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="w-full mt-2"
+            onClick={() => setShowAchievements(true)}
+          >
+            <Sparkles className="w-3 h-3 mr-2" />
+            সব অর্জন দেখুন
+          </Button>
         </div>
 
         {/* Quick Stats */}
@@ -255,6 +331,262 @@ export const GamificationPanel = ({ user, users }: GamificationPanelProps) => {
               </div>
             )}
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Achievements Dialog */}
+      <Dialog open={showAchievements} onOpenChange={setShowAchievements}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-hidden flex flex-col">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Trophy className="w-5 h-5 text-warning" />
+              অর্জনসমূহ ({unlockedAchievements.length}/{totalAchievements})
+            </DialogTitle>
+            <DialogDescription>
+              আপনার সকল অর্জন এবং প্রগ্রেস দেখুন
+            </DialogDescription>
+          </DialogHeader>
+          
+          <Tabs defaultValue="all" className="flex-1 flex flex-col">
+            <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="all">সব</TabsTrigger>
+              <TabsTrigger value="unlocked">আনলক</TabsTrigger>
+              <TabsTrigger value="locked">লক</TabsTrigger>
+              <TabsTrigger value="progress">প্রগ্রেস</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="all" className="flex-1 overflow-y-auto mt-4">
+              <div className="grid gap-3">
+                {achievements.map((achievement) => (
+                  <div
+                    key={achievement.id}
+                    className={`p-4 rounded-lg border transition-all ${
+                      achievement.unlocked
+                        ? 'bg-gradient-to-r from-success/10 to-success/5 border-success/30'
+                        : 'bg-muted/30 border-border'
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className={`text-3xl ${!achievement.unlocked && 'grayscale opacity-50'}`}>
+                        {achievement.icon}
+                      </div>
+                      <div className="flex-1 space-y-2">
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <h4 className="font-semibold flex items-center gap-2">
+                              {achievement.name}
+                              {achievement.unlocked ? (
+                                <Badge variant="secondary" className="bg-success/20 text-success">
+                                  <CheckCircle2 className="w-3 h-3 mr-1" />
+                                  আনলক
+                                </Badge>
+                              ) : (
+                                <Badge variant="outline" className="gap-1">
+                                  <Lock className="w-3 h-3" />
+                                  লক
+                                </Badge>
+                              )}
+                            </h4>
+                            <p className="text-sm text-muted-foreground mt-1">
+                              {achievement.description}
+                            </p>
+                            <Badge variant="secondary" className="mt-2 text-xs">
+                              {achievement.category}
+                            </Badge>
+                          </div>
+                        </div>
+                        
+                        {!achievement.unlocked && (
+                          <div className="space-y-1">
+                            <div className="flex justify-between text-xs text-muted-foreground">
+                              <span>প্রগ্রেস</span>
+                              <span>
+                                {achievement.current}/{achievement.requirement}
+                              </span>
+                            </div>
+                            <Progress 
+                              value={(Math.min(achievement.current, achievement.requirement) / achievement.requirement) * 100} 
+                              className="h-2"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="unlocked" className="flex-1 overflow-y-auto mt-4">
+              <div className="grid gap-3">
+                {achievements.filter(a => a.unlocked).map((achievement) => (
+                  <div
+                    key={achievement.id}
+                    className="p-4 rounded-lg border bg-gradient-to-r from-success/10 to-success/5 border-success/30"
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="text-3xl animate-pulse">
+                        {achievement.icon}
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold flex items-center gap-2">
+                          {achievement.name}
+                          <Badge variant="secondary" className="bg-success/20 text-success">
+                            <CheckCircle2 className="w-3 h-3 mr-1" />
+                            আনলক
+                          </Badge>
+                        </h4>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          {achievement.description}
+                        </p>
+                        <Badge variant="secondary" className="mt-2 text-xs">
+                          {achievement.category}
+                        </Badge>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="locked" className="flex-1 overflow-y-auto mt-4">
+              <div className="grid gap-3">
+                {achievements.filter(a => !a.unlocked).map((achievement) => (
+                  <div
+                    key={achievement.id}
+                    className="p-4 rounded-lg border bg-muted/30 border-border"
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="text-3xl grayscale opacity-50">
+                        {achievement.icon}
+                      </div>
+                      <div className="flex-1 space-y-2">
+                        <div>
+                          <h4 className="font-semibold flex items-center gap-2">
+                            {achievement.name}
+                            <Badge variant="outline" className="gap-1">
+                              <Lock className="w-3 h-3" />
+                              লক
+                            </Badge>
+                          </h4>
+                          <p className="text-sm text-muted-foreground mt-1">
+                            {achievement.description}
+                          </p>
+                          <Badge variant="secondary" className="mt-2 text-xs">
+                            {achievement.category}
+                          </Badge>
+                        </div>
+                        
+                        <div className="space-y-1">
+                          <div className="flex justify-between text-xs text-muted-foreground">
+                            <span>প্রগ্রেস</span>
+                            <span>
+                              {achievement.current}/{achievement.requirement}
+                            </span>
+                          </div>
+                          <Progress 
+                            value={(Math.min(achievement.current, achievement.requirement) / achievement.requirement) * 100} 
+                            className="h-2"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="progress" className="flex-1 overflow-y-auto mt-4">
+              <div className="space-y-4">
+                <div className="p-4 rounded-lg bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/20">
+                  <h3 className="font-semibold mb-3 flex items-center gap-2">
+                    <TrendingUp className="w-4 h-4" />
+                    আপনার সামগ্রিক প্রগ্রেস
+                  </h3>
+                  <div className="space-y-3">
+                    <div>
+                      <div className="flex justify-between text-sm mb-1">
+                        <span>অর্জন সম্পন্ন</span>
+                        <span className="font-medium">
+                          {unlockedAchievements.length}/{totalAchievements}
+                        </span>
+                      </div>
+                      <Progress 
+                        value={(unlockedAchievements.length / totalAchievements) * 100} 
+                        className="h-2"
+                      />
+                    </div>
+                    <div>
+                      <div className="flex justify-between text-sm mb-1">
+                        <span>ট্রাস্ট স্কোর</span>
+                        <span className="font-medium">{user.trustScore}/100</span>
+                      </div>
+                      <Progress 
+                        value={(user.trustScore / 100) * 100} 
+                        className="h-2"
+                      />
+                    </div>
+                    <div>
+                      <div className="flex justify-between text-sm mb-1">
+                        <span>ফলোয়ার</span>
+                        <span className="font-medium">{user.followers}/500</span>
+                      </div>
+                      <Progress 
+                        value={(user.followers / 500) * 100} 
+                        className="h-2"
+                      />
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="grid gap-3">
+                  <h3 className="font-semibold">পরবর্তী অর্জন</h3>
+                  {achievements
+                    .filter(a => !a.unlocked)
+                    .sort((a, b) => {
+                      const progressA = (a.current / a.requirement) * 100;
+                      const progressB = (b.current / b.requirement) * 100;
+                      return progressB - progressA;
+                    })
+                    .slice(0, 3)
+                    .map((achievement) => (
+                      <div
+                        key={achievement.id}
+                        className="p-4 rounded-lg border bg-muted/30 border-border"
+                      >
+                        <div className="flex items-start gap-3">
+                          <div className="text-2xl grayscale opacity-50">
+                            {achievement.icon}
+                          </div>
+                          <div className="flex-1 space-y-2">
+                            <div>
+                              <h4 className="font-medium">{achievement.name}</h4>
+                              <p className="text-xs text-muted-foreground">
+                                {achievement.description}
+                              </p>
+                            </div>
+                            <div className="space-y-1">
+                              <div className="flex justify-between text-xs text-muted-foreground">
+                                <span>
+                                  আর মাত্র {achievement.requirement - achievement.current} প্রয়োজন
+                                </span>
+                                <span>
+                                  {Math.round((achievement.current / achievement.requirement) * 100)}%
+                                </span>
+                              </div>
+                              <Progress 
+                                value={(Math.min(achievement.current, achievement.requirement) / achievement.requirement) * 100} 
+                                className="h-2"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            </TabsContent>
+          </Tabs>
         </DialogContent>
       </Dialog>
     </Card>
