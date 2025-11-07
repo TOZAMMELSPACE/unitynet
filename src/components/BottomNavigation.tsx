@@ -1,5 +1,5 @@
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { Home, Bell, User, MessageCircle, Search, Users, Settings, Coins, Building2, BarChart3 } from "lucide-react";
+import { Home, Bell, User, MessageCircle, Search, Users, Settings, Coins, Building2, BarChart3, BookOpen } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useState } from "react";
 
@@ -11,6 +11,7 @@ export const BottomNavigation = () => {
 
   const navItems = [
     { path: "/explore", icon: Search, labelEn: "Explore", labelBn: "এক্সপ্লোর" },
+    { path: "/learning-zone", icon: BookOpen, labelEn: "Learn", labelBn: "শিখুন" },
     { path: "/unity-note", icon: Coins, labelEn: "Note", labelBn: "নোট" },
     { path: "/impact-report", icon: BarChart3, labelEn: "Impact", labelBn: "প্রভাব" },
     { path: "/notifications", icon: Bell, labelEn: "Alerts", labelBn: "সতর্কতা" },

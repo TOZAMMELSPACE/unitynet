@@ -16,6 +16,7 @@ import Settings from "./pages/Settings";
 import UnityNote from "./pages/UnityNote";
 import UnityGovernment from "./pages/UnityGovernment";
 import ImpactReport from "./pages/ImpactReport";
+import LearningZone from "./pages/LearningZone";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +40,7 @@ const App = () => (
                 <Route path="/groups" element={<Groups currentUser={props.currentUser} onSignOut={props.onSignOut} />} />
                 <Route path="/settings" element={<Settings currentUser={props.currentUser} onSignOut={props.onSignOut} />} />
                 <Route path="/unity-government" element={<UnityGovernment currentUser={props.currentUser} users={props.users} onSignOut={props.onSignOut} />} />
+                <Route path="/learning-zone" element={<LearningZone currentUser={props.currentUser} onSignOut={props.onSignOut} />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>

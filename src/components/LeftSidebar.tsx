@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { Home, Bell, User, MessageCircle, Search, Users, Settings, Plus, Coins, Building2, BarChart3 } from "lucide-react";
+import { Home, Bell, User, MessageCircle, Search, Users, Settings, Plus, Coins, Building2, BarChart3, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageToggle } from "@/components/LanguageToggle";
@@ -15,6 +15,7 @@ export const LeftSidebar = ({ onCreatePost }: LeftSidebarProps) => {
   const navItems = [
     { path: "/", icon: Home, labelEn: "Home", labelBn: "হোম" },
     { path: "/explore", icon: Search, labelEn: "Explore", labelBn: "এক্সপ্লোর" },
+    { path: "/learning-zone", icon: BookOpen, labelEn: "Learning Zone", labelBn: "লার্নিং জোন" },
     { path: "/unity-note", icon: Coins, labelEn: "Unity Note", labelBn: "ঐক্য নোট" },
     { path: "/impact-report", icon: BarChart3, labelEn: "Impact Report", labelBn: "প্রভাব রিপোর্ট" },
     { path: "/unity-government", icon: Building2, labelEn: "Unity Government", labelBn: "ইউনিটি সরকার" },
