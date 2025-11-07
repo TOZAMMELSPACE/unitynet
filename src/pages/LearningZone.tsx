@@ -49,6 +49,20 @@ interface Course {
   prerequisites?: string;
 }
 
+interface Book {
+  id: string;
+  title: string;
+  titleBn: string;
+  author: string;
+  authorBn: string;
+  description: string;
+  descriptionBn: string;
+  chapters: number;
+  category: string;
+  link: string;
+  coverColor: string;
+}
+
 const courses: Course[] = [
   {
     id: "python-basics",
@@ -119,6 +133,22 @@ const courses: Course[] = [
     icon: BookMarked,
     color: "from-red-500 to-rose-500",
     prerequisites: "Basic Bengali reading/writing"
+  }
+];
+
+const freeBooks: Book[] = [
+  {
+    id: "manush-na-monushyarupi",
+    title: "মানুষ না মনুষ্যরূপী?",
+    titleBn: "মানুষ না মনুষ্যরূপী?",
+    author: "Md. Tozammel Haque",
+    authorBn: "মোঃ তোজাম্মেল হক",
+    description: "A sci-fi novel set in future New Earth City, where at age 25, everyone must take a 'Humanity Scan' to determine if they are truly human or just acting like one. Follow Ishan Rahman's journey through 12 chapters exploring humanity, morality, and the fight against inner demons.",
+    descriptionBn: "ভবিষ্যতের নিউ আর্থ সিটিতে সেট করা একটি সাই-ফাই উপন্যাস, যেখানে ২৫ বছর বয়সে সবাইকে 'মানবতা স্ক্যান' দিতে হয়। ১২ অধ্যায়ে ইশান রহমানের যাত্রা অনুসরণ করুন—মানবতা, নৈতিকতা এবং অন্তরের শত্রুর বিরুদ্ধে লড়াই।",
+    chapters: 12,
+    category: "sci-fi",
+    link: "https://sites.google.com/view/tozammelbook/home",
+    coverColor: "from-indigo-600 via-purple-600 to-pink-600"
   }
 ];
 
@@ -270,6 +300,25 @@ export default function LearningZone({ currentUser, onSignOut }: LearningZonePro
                   </SelectContent>
                 </Select>
               </div>
+            </div>
+          </Card>
+
+          {/* Free Reading Library */}
+          <Card className="p-6 bg-gradient-to-br from-primary/5 to-accent/5 border-primary/20">
+            <div className="flex items-center gap-3 mb-4">
+              <BookMarked className="w-6 h-6 text-primary" />
+              <div>
+                <h2 className="text-xl font-bold">{t("Free Reading Library", "ফ্রি পড়ার লাইব্রেরি")}</h2>
+                <p className="text-sm text-muted-foreground">
+                  {t("Explore free books and novels from our community", "কমিউনিটি থেকে ফ্রি বই এবং উপন্যাস পড়ুন")}
+                </p>
+              </div>
+            </div>
+            
+            <div className="grid gap-4">
+              {freeBooks.map((book) => (
+                <BookCard key={book.id} book={book} />
+              ))}
             </div>
           </Card>
 
@@ -508,6 +557,61 @@ function CourseCard({
               </>
             )}
           </Button>
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function BookCard({ book }: { book: Book }) {
+  const { t, language } = useLanguage();
+
+  return (
+    <Card className="p-4 hover:shadow-xl transition-all duration-300 border-primary/20 bg-card">
+      <div className="flex gap-4">
+        {/* Book Cover */}
+        <div className={`w-24 h-32 rounded-lg bg-gradient-to-br ${book.coverColor} flex items-center justify-center flex-shrink-0 shadow-lg`}>
+          <BookMarked className="w-12 h-12 text-white" />
+        </div>
+        
+        <div className="flex-1 min-w-0">
+          <div className="mb-2">
+            <h3 className="font-bold text-lg mb-1">
+              {language === "en" ? book.title : book.titleBn}
+            </h3>
+            <p className="text-sm text-muted-foreground">
+              {t("by", "লিখেছেন")} {language === "en" ? book.author : book.authorBn}
+            </p>
+          </div>
+          
+          <p className="text-sm text-muted-foreground mb-3 line-clamp-3">
+            {language === "en" ? book.description : book.descriptionBn}
+          </p>
+          
+          <div className="flex flex-wrap gap-2 mb-3">
+            <Badge variant="secondary" className="gap-1">
+              <BookOpen className="w-3 h-3" />
+              {book.chapters} {t("chapters", "অধ্যায়")}
+            </Badge>
+            <Badge variant="outline">
+              {book.category === "sci-fi" ? t("Sci-Fi", "সাই-ফাই") : book.category}
+            </Badge>
+            <Badge variant="outline" className="bg-green-500/10 text-green-700 dark:text-green-300">
+              {t("Free", "ফ্রি")}
+            </Badge>
+          </div>
+          
+          <a
+            href={book.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block"
+          >
+            <Button className="btn-hero" size="sm">
+              <BookOpen className="w-4 h-4 mr-2" />
+              {t("Read Now", "এখনই পড়ুন")}
+            </Button>
+          </a>
         </div>
       </div>
     </Card>
