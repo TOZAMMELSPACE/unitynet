@@ -81,8 +81,18 @@ export const Header = ({ currentUser, onSignOut, onCreatePost, onFilterChange }:
   return (
     <header className="card-enhanced p-3 lg:p-4 mb-4 lg:mb-6">
       <div className="flex flex-col gap-3 lg:gap-4">
-        {/* Top Row: Create Post + Welcome + Theme + Profile + Sign Out */}
+        {/* Top Row: Logo + Create Post + Theme + Profile + Sign Out */}
         <div className="flex flex-wrap items-center gap-2 lg:gap-3">
+          {/* UnityNet Logo with Slogan */}
+          <div className="flex flex-col mr-2 lg:mr-4 flex-shrink-0">
+            <h1 className="text-lg lg:text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              UnityNet
+            </h1>
+            <p className="text-[10px] lg:text-xs text-muted-foreground text-bengali -mt-1">
+              একত্রে শক্তিশালী
+            </p>
+          </div>
+
           {/* Create Post Button */}
           {currentUser && onCreatePost && (
             <Button
@@ -99,9 +109,9 @@ export const Header = ({ currentUser, onSignOut, onCreatePost, onFilterChange }:
           
           {/* Welcome Text */}
           <div className="hidden md:flex flex-col flex-1 min-w-0">
-            <h1 className="text-base lg:text-lg font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent truncate">
+            <h2 className="text-base lg:text-lg font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent truncate">
               Welcome to UnityNet
-            </h1>
+            </h2>
             <p className="text-xs text-muted-foreground text-bengali truncate">
               এই প্ল্যাটফর্মে আপনি স্থানীয় কমিউনিটির সাথে যুক্ত হতে পারেন, জ্ঞান শেয়ার করতে পারেন এবং নতুন কিছু শিখতে পারেন।
             </p>
@@ -148,9 +158,9 @@ export const Header = ({ currentUser, onSignOut, onCreatePost, onFilterChange }:
 
         {/* Welcome Text - Mobile Only */}
         <div className="md:hidden w-full pt-2 border-t border-primary/10">
-          <h1 className="text-lg font-bold mb-1 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+          <h2 className="text-lg font-bold mb-1 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
             Welcome to UnityNet
-          </h1>
+          </h2>
           <p className="text-xs text-muted-foreground text-bengali leading-relaxed">
             এই প্ল্যাটফর্মে আপনি স্থানীয় কমিউনিটির সাথে যুক্ত হতে পারেন, জ্ঞান শেয়ার করতে পারেন এবং নতুন কিছু শিখতে পারেন।
           </p>
