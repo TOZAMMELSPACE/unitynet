@@ -71,3 +71,17 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+
+# UnityNet
+
+> **এই প্রোজেক্টটি পাবলিক করা হয়েছে শিক্ষামূলক উদ্দেশ্যে।**  
+> কোড দেখা, শেখা, ফর্ক করা যাবে — কিন্তু **বাণিজ্যিক ব্যবহার বা পুনঃপ্রকাশের জন্য লিখিত অনুমতি লাগবে**।
+
+**© 2025 Tozammel Haque**  
+X: [@tozammelhaque72](https://x.com/tozammelhaque72)  
+Email: tozammelbusiness@gmail.com
+
+---
+
+**লাইসেন্স**: [MIT License](LICENSE)  
+**কোড কপি করে ব্যবহার করলে আমার ক্রেডিট দিন।**
