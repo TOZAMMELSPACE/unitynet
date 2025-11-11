@@ -83,14 +83,14 @@ const Index = ({
   };
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-muted/10 to-background">
+      <Header 
+        currentUser={currentUser} 
+        onSignOut={onSignOut}
+        onCreatePost={() => handleCreatePost('text')}
+        onFilterChange={handleFilterChange}
+      />
+      
       <div className="container mx-auto px-3 sm:px-4 py-4 max-w-7xl">
-        <Header 
-          currentUser={currentUser} 
-          onSignOut={onSignOut}
-          onCreatePost={() => handleCreatePost('text')}
-          onFilterChange={handleFilterChange}
-        />
-
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6 mt-4 sm:mt-6">
           {/* Main Content */}
           <div className="lg:col-span-3 space-y-4 sm:space-y-6">
