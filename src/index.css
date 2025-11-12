@@ -8,117 +8,123 @@
 
 @layer base {
   :root {
-    /* Core Colors - Peaceful & Calming */
-    --background: 40 30% 97%;  /* Soft warm cream */
-    --foreground: 200 15% 25%;  /* Soft charcoal */
+    /* Core Colors - Vibrant & Peaceful */
+    --background: 200 25% 98%;  /* Soft sky blue-white */
+    --foreground: 220 18% 20%;  /* Deep blue-gray */
     
     --card: 0 0% 100%;
-    --card-foreground: 200 15% 25%;
+    --card-foreground: 220 18% 20%;
     
     --popover: 0 0% 100%;
-    --popover-foreground: 200 15% 25%;
+    --popover-foreground: 220 18% 20%;
     
-    /* Unity Brand Colors - Peaceful & Harmonious */
-    --primary: 165 45% 55%;  /* Soft sage/teal - calming */
+    /* Unity Brand Colors - Vibrant & Harmonious */
+    --primary: 175 60% 50%;  /* Vibrant teal - energetic yet calm */
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 165 50% 70%;
+    --primary-glow: 175 70% 65%;
     
-    --secondary: 230 40% 70%;  /* Soft lavender - peaceful */
-    --secondary-foreground: 200 15% 25%;
+    --secondary: 280 50% 65%;  /* Vibrant purple - creative */
+    --secondary-foreground: 0 0% 100%;
     
-    --muted: 40 25% 94%;  /* Warm off-white */
-    --muted-foreground: 200 12% 45%;
+    --muted: 200 20% 96%;  /* Cool off-white */
+    --muted-foreground: 220 15% 45%;
     
-    --accent: 15 65% 70%;  /* Soft coral/peach - gentle warmth */
-    --accent-foreground: 200 15% 25%;
-    --accent-glow: 15 70% 80%;
+    --accent: 340 75% 65%;  /* Vibrant pink - joyful */
+    --accent-foreground: 0 0% 100%;
+    --accent-glow: 340 80% 75%;
     
-    --success: 150 40% 50%;  /* Soft green */
+    --success: 150 55% 48%;  /* Vibrant green */
     --success-foreground: 0 0% 100%;
     
-    --warning: 38 60% 60%;  /* Soft amber */
-    --warning-foreground: 200 15% 25%;
+    --warning: 38 92% 50%;  /* Vibrant orange */
+    --warning-foreground: 0 0% 100%;
     
-    --destructive: 5 60% 65%;  /* Soft red */
+    --destructive: 5 75% 58%;  /* Vibrant red */
     --destructive-foreground: 0 0% 100%;
     
-    --border: 40 20% 88%;
-    --input: 40 20% 92%;
-    --ring: 165 45% 55%;
+    --border: 200 25% 90%;
+    --input: 200 25% 94%;
+    --ring: 175 60% 50%;
     
     --radius: 1rem;
     
-    /* Peaceful Gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(165 45% 55%), hsl(230 40% 70%));
-    --gradient-trust: linear-gradient(135deg, hsl(15 65% 70%), hsl(165 50% 70%));
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(165 30% 96%));
+    /* Vibrant Peaceful Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(175 60% 50%), hsl(280 50% 65%), hsl(340 75% 65%));
+    --gradient-trust: linear-gradient(135deg, hsl(340 75% 65%), hsl(175 70% 65%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(175 40% 97%));
+    --gradient-subtle: linear-gradient(180deg, hsl(200 30% 99%), hsl(175 25% 96%));
+    --gradient-vibrant: linear-gradient(120deg, hsl(175 60% 50%), hsl(280 50% 65%));
     
-    /* Soft, Gentle Shadows */
-    --shadow-soft: 0 2px 8px 0 rgba(100, 160, 150, 0.08), 0 1px 3px 0 rgba(100, 160, 150, 0.05);
-    --shadow-medium: 0 4px 12px -2px rgba(100, 160, 150, 0.12), 0 2px 6px -1px rgba(100, 160, 150, 0.08);
-    --shadow-large: 0 12px 24px -4px rgba(100, 160, 150, 0.15), 0 8px 16px -4px rgba(100, 160, 150, 0.1);
-    --shadow-glow: 0 0 40px hsl(165 50% 70% / 0.25), 0 0 20px hsl(230 40% 70% / 0.2);
+    /* Soft, Beautiful Shadows with Color */
+    --shadow-soft: 0 2px 12px 0 rgba(75, 180, 170, 0.12), 0 1px 4px 0 rgba(75, 180, 170, 0.08);
+    --shadow-medium: 0 4px 20px -2px rgba(75, 180, 170, 0.18), 0 2px 10px -1px rgba(75, 180, 170, 0.12);
+    --shadow-large: 0 12px 40px -4px rgba(75, 180, 170, 0.24), 0 8px 24px -4px rgba(75, 180, 170, 0.16);
+    --shadow-glow: 0 0 60px hsl(175 70% 65% / 0.35), 0 0 30px hsl(280 50% 65% / 0.25), 0 0 15px hsl(340 75% 65% / 0.2);
+    --shadow-color: 0 4px 20px rgba(214, 51, 132, 0.15);
     
     /* Smooth Animations */
-    --transition-smooth: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-bounce: all 0.35s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
-    --sidebar-background: 40 25% 98%;
-    --sidebar-foreground: 200 15% 30%;
-    --sidebar-primary: 165 45% 55%;
+    --sidebar-background: 200 25% 98%;
+    --sidebar-foreground: 220 18% 20%;
+    --sidebar-primary: 175 60% 50%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 40 25% 94%;
-    --sidebar-accent-foreground: 200 15% 25%;
-    --sidebar-border: 40 20% 88%;
-    --sidebar-ring: 165 45% 55%;
+    --sidebar-accent: 200 20% 96%;
+    --sidebar-accent-foreground: 220 18% 20%;
+    --sidebar-border: 200 25% 90%;
+    --sidebar-ring: 175 60% 50%;
   }
 
   .dark {
-    --background: 200 20% 12%;  /* Soft dark blue-gray */
-    --foreground: 40 25% 95%;
+    --background: 220 25% 10%;  /* Deep blue-gray */
+    --foreground: 200 20% 96%;
     
-    --card: 200 18% 16%;
-    --card-foreground: 40 25% 95%;
+    --card: 220 22% 14%;
+    --card-foreground: 200 20% 96%;
     
-    --popover: 200 18% 16%;
-    --popover-foreground: 40 25% 95%;
+    --popover: 220 22% 14%;
+    --popover-foreground: 200 20% 96%;
     
-    --primary: 165 40% 60%;  /* Soft sage in dark mode */
+    --primary: 175 55% 55%;  /* Vibrant teal in dark */
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 165 45% 75%;
+    --primary-glow: 175 65% 70%;
     
-    --secondary: 230 35% 75%;  /* Soft lavender in dark */
-    --secondary-foreground: 200 20% 12%;
+    --secondary: 280 45% 70%;  /* Vibrant purple in dark */
+    --secondary-foreground: 0 0% 100%;
     
-    --muted: 200 18% 20%;
-    --muted-foreground: 200 10% 65%;
+    --muted: 220 20% 18%;
+    --muted-foreground: 220 12% 70%;
     
-    --accent: 15 60% 75%;  /* Soft coral in dark */
-    --accent-foreground: 200 20% 12%;
-    --accent-glow: 15 65% 85%;
+    --accent: 340 70% 70%;  /* Vibrant pink in dark */
+    --accent-foreground: 0 0% 100%;
+    --accent-glow: 340 75% 80%;
     
-    --success: 150 35% 55%;
+    --success: 150 50% 52%;
     --success-foreground: 0 0% 100%;
     
-    --warning: 38 55% 65%;
-    --warning-foreground: 200 20% 12%;
+    --warning: 38 85% 55%;
+    --warning-foreground: 0 0% 100%;
     
-    --destructive: 5 55% 70%;
+    --destructive: 5 70% 62%;
     --destructive-foreground: 0 0% 100%;
     
-    --border: 200 15% 25%;
-    --input: 200 18% 20%;
-    --ring: 165 40% 60%;
+    --border: 220 18% 24%;
+    --input: 220 20% 18%;
+    --ring: 175 55% 55%;
     
-    /* Dark mode peaceful gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(165 40% 60%), hsl(230 35% 75%));
-    --gradient-trust: linear-gradient(135deg, hsl(15 60% 75%), hsl(165 45% 75%));
-    --gradient-card: linear-gradient(145deg, hsl(200 18% 16%), hsl(165 25% 22%));
+    /* Dark mode vibrant gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(175 55% 55%), hsl(280 45% 70%), hsl(340 70% 70%));
+    --gradient-trust: linear-gradient(135deg, hsl(340 70% 70%), hsl(175 65% 70%));
+    --gradient-card: linear-gradient(145deg, hsl(220 22% 14%), hsl(175 30% 20%));
+    --gradient-subtle: linear-gradient(180deg, hsl(220 24% 12%), hsl(175 28% 16%));
+    --gradient-vibrant: linear-gradient(120deg, hsl(175 55% 55%), hsl(280 45% 70%));
     
-    --shadow-soft: 0 2px 8px 0 rgba(100, 160, 150, 0.15), 0 1px 3px 0 rgba(100, 160, 150, 0.1);
-    --shadow-medium: 0 4px 12px -2px rgba(100, 160, 150, 0.2), 0 2px 6px -1px rgba(100, 160, 150, 0.15);
-    --shadow-large: 0 12px 24px -4px rgba(100, 160, 150, 0.25), 0 8px 16px -4px rgba(100, 160, 150, 0.18);
-    --shadow-glow: 0 0 48px hsl(165 45% 75% / 0.3), 0 0 24px hsl(230 35% 75% / 0.25);
+    --shadow-soft: 0 2px 12px 0 rgba(75, 180, 170, 0.2), 0 1px 4px 0 rgba(75, 180, 170, 0.15);
+    --shadow-medium: 0 4px 20px -2px rgba(75, 180, 170, 0.28), 0 2px 10px -1px rgba(75, 180, 170, 0.2);
+    --shadow-large: 0 12px 40px -4px rgba(75, 180, 170, 0.35), 0 8px 24px -4px rgba(75, 180, 170, 0.25);
+    --shadow-glow: 0 0 70px hsl(175 65% 70% / 0.45), 0 0 35px hsl(280 45% 70% / 0.35), 0 0 18px hsl(340 70% 70% / 0.25);
+    --shadow-color: 0 4px 20px rgba(214, 51, 132, 0.25);
   }
 }
 
@@ -134,7 +140,7 @@
   }
 
   body {
-    @apply bg-background text-card-foreground font-medium;
+    @apply bg-gradient-to-br from-background via-background to-muted text-card-foreground font-medium;
     font-feature-settings: "rlig" 1, "calt" 1;
     margin: 0;
     padding: 0;
@@ -180,33 +186,47 @@
 }
 
 @layer components {
-  /* Hero variants */
+  /* Hero variants with vibrant colors */
   .btn-hero {
-    @apply bg-gradient-to-r from-primary to-primary-glow text-primary-foreground 
-           shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300;
+    @apply bg-gradient-to-r from-primary via-secondary to-accent text-primary-foreground 
+           shadow-glow hover:shadow-glow hover:scale-105 transition-all duration-500;
   }
   
   /* Trust variants */
   .btn-trust {
     @apply bg-gradient-to-r from-accent to-accent-glow text-accent-foreground 
-           shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300;
+           shadow-medium hover:shadow-glow hover:scale-105 transition-all duration-500;
   }
   
-  /* Card enhancements */
+  /* Card enhancements with beautiful shadows */
   .card-enhanced {
-    @apply bg-gradient-to-br from-card to-muted/20 shadow-medium 
-           hover:shadow-large transition-all duration-300 hover:-translate-y-1;
+    @apply bg-gradient-to-br from-card via-card to-muted/30 shadow-medium 
+           hover:shadow-large transition-all duration-500 hover:-translate-y-1
+           border border-border/50 backdrop-blur-sm;
   }
   
   /* Trust score styling */
   .trust-score {
-    @apply bg-gradient-to-r from-accent/10 to-accent-glow/10 text-accent-foreground 
-           px-3 py-1 rounded-full text-sm font-medium border border-accent/20;
+    @apply bg-gradient-to-r from-primary/10 via-accent/10 to-accent-glow/10 
+           text-primary px-3 py-1 rounded-full text-sm font-semibold 
+           border border-primary/30 shadow-soft;
   }
   
   /* Bengali text styling */
   .text-bengali {
     font-family: 'Noto Sans Bengali', 'Inter', sans-serif;
     font-feature-settings: "blwf" 1, "pref" 1, "vatu" 1;
+  }
+
+  /* Animated gradient background */
+  .animated-gradient {
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)), hsl(var(--accent)));
+    background-size: 200% 200%;
+    animation: gradient-shift 8s ease infinite;
+  }
+
+  @keyframes gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
   }
 }
