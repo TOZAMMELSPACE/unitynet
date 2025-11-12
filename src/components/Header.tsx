@@ -79,63 +79,51 @@ export const Header = ({ currentUser, onSignOut, onCreatePost, onFilterChange }:
   ].filter(Boolean).length;
 
   return (
-    <header className="card-enhanced p-3 lg:p-4 mb-4 lg:mb-6">
+    <header className="card-enhanced p-2 sm:p-3 lg:p-4 mb-4 lg:mb-6">
       <div className="flex flex-col gap-3 lg:gap-4">
         {/* Top Row: Logo + Create Post + Theme + Profile + Sign Out */}
-        <div className="flex flex-nowrap items-center gap-2 lg:gap-3">
-          {/* UnityNet Logo with Slogan */}
-          <div className="flex flex-col mr-2 lg:mr-4 flex-shrink-0">
-            <h1 className="text-base lg:text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent whitespace-nowrap">
+        <div className="flex items-center justify-between gap-2 lg:gap-3">
+          {/* Left: Logo */}
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <h1 className="text-lg sm:text-xl lg:text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent whitespace-nowrap">
               UnityNet
             </h1>
-            <p className="hidden lg:block text-xs text-muted-foreground text-bengali -mt-1">
-              একত্রে শক্তিশালী
-            </p>
           </div>
 
-          {/* Create Post Button */}
-          {currentUser && onCreatePost && (
-            <Button
-              onClick={onCreatePost}
-              className="btn-hero flex items-center gap-1.5 px-3 py-1.5 lg:px-4 lg:py-2 shadow-elegant hover:shadow-glow transition-all duration-300 flex-shrink-0"
-              size="sm"
-            >
-              <Plus className="h-4 w-4 lg:h-4 lg:w-4" />
-              <span className="hidden sm:inline text-sm lg:text-base">
-                {t("New Post", "নতুন পোস্ট")}
-              </span>
-            </Button>
-          )}
-          
-          {/* Welcome Text */}
-          <div className="hidden md:flex flex-col flex-1 min-w-0">
-            <h2 className="text-base lg:text-lg font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent truncate">
-              Welcome to UnityNet
-            </h2>
-            <p className="text-xs text-muted-foreground text-bengali truncate">
-              এই প্ল্যাটফর্মে আপনি স্থানীয় কমিউনিটির সাথে যুক্ত হতে পারেন, জ্ঞান শেয়ার করতে পারেন এবং নতুন কিছু শিখতে পারেন।
-            </p>
-          </div>
-          
-          <div className="flex items-center gap-2 lg:gap-3 ml-auto flex-shrink-0">
+          {/* Right: Actions */}
+          <div className="flex items-center gap-1.5 sm:gap-2 lg:gap-3">
+            {/* Create Post Button */}
+            {currentUser && onCreatePost && (
+              <Button
+                onClick={onCreatePost}
+                className="btn-hero h-9 w-9 sm:h-10 sm:w-auto p-0 sm:px-4 shadow-elegant hover:shadow-glow transition-all duration-300"
+                size="sm"
+              >
+                <Plus className="h-4 w-4" />
+                <span className="hidden sm:inline ml-2">
+                  {t("New Post", "নতুন পোস্ট")}
+                </span>
+              </Button>
+            )}
+            
             {/* Dark Mode Toggle */}
             <Button
               variant="ghost"
               size="sm"
               onClick={toggleTheme}
-              className="h-8 w-8 lg:h-9 lg:w-9 p-0 hover:bg-primary/10 bg-gradient-to-r from-primary/5 to-accent/10 border border-primary/20 shadow-sm hover:shadow-md transition-all duration-300 flex-shrink-0"
+              className="h-9 w-9 sm:h-10 sm:w-10 p-0 hover:bg-primary/10 bg-gradient-to-r from-primary/5 to-accent/10 border border-primary/20 shadow-sm hover:shadow-md transition-all duration-300"
             >
-              <Sun className="h-4 w-4 lg:h-4 lg:w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 text-primary" />
-              <Moon className="absolute h-4 w-4 lg:h-4 lg:w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 text-primary" />
+              <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 text-primary" />
+              <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 text-primary" />
               <span className="sr-only">Toggle theme</span>
             </Button>
             
             {/* Profile and Sign Out */}
             {currentUser ? (
               <>
-                <div className="text-right bg-gradient-to-r from-primary/15 to-accent/20 px-2.5 py-1.5 lg:px-4 lg:py-3 rounded-lg lg:rounded-xl border border-primary/30 shadow-elegant hover:shadow-glow transition-all duration-300 backdrop-blur-sm flex-shrink-0">
-                  <div className="font-bold text-primary text-xs lg:text-lg truncate max-w-[80px] lg:max-w-none">{currentUser.name}</div>
-                  <div className="trust-score text-[10px] lg:text-sm font-semibold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent whitespace-nowrap">
+                <div className="bg-gradient-to-r from-primary/15 to-accent/20 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg border border-primary/30 shadow-elegant backdrop-blur-sm">
+                  <div className="font-bold text-primary text-sm sm:text-base">{currentUser.name}</div>
+                  <div className="trust-score text-xs font-semibold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                     {Math.round(currentUser.trustScore)}
                   </div>
                 </div>
@@ -143,17 +131,28 @@ export const Header = ({ currentUser, onSignOut, onCreatePost, onFilterChange }:
                   onClick={onSignOut}
                   variant="outline"
                   size="sm"
-                  className="border-primary/30 text-primary hover:bg-primary/20 hover:text-primary font-semibold shadow-sm hover:shadow-md transition-all duration-300 bg-gradient-to-r from-primary/5 to-accent/10 text-xs lg:text-sm px-3 py-1.5 lg:px-4 lg:py-2 flex-shrink-0"
+                  className="border-primary/30 text-primary hover:bg-primary/20 hover:text-primary font-semibold shadow-sm hover:shadow-md transition-all duration-300 bg-gradient-to-r from-primary/5 to-accent/10 h-9 sm:h-10"
                 >
-                  {t("Sign Out", "সাইন আউট")}
+                  <span className="hidden sm:inline">{t("Sign Out", "সাইন আউট")}</span>
+                  <span className="sm:hidden">আউট</span>
                 </Button>
               </>
             ) : (
-              <div className="text-muted-foreground text-xs lg:text-sm">
+              <div className="text-muted-foreground text-sm">
                 {t("Sign In", "সাইন ইন")}
               </div>
             )}
           </div>
+        </div>
+
+        {/* Welcome Text - Desktop */}
+        <div className="hidden md:block border-t border-primary/10 pt-3">
+          <h2 className="text-lg font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            Welcome to UnityNet
+          </h2>
+          <p className="text-sm text-muted-foreground text-bengali">
+            এই প্ল্যাটফর্মে আপনি স্থানীয় কমিউনিটির সাথে যুক্ত হতে পারেন, জ্ঞান শেয়ার করতে পারেন এবং নতুন কিছু শিখতে পারেন।
+          </p>
         </div>
 
         {/* Welcome Text - Mobile Only */}
