@@ -9,7 +9,6 @@ import { FloatingActionButton } from "@/components/FloatingActionButton";
 import { LocalEvents } from "@/components/LocalEvents";
 import { JobBoard } from "@/components/JobBoard";
 import { GamificationPanel } from "@/components/GamificationPanel";
-import { Button } from "@/components/ui/button";
 import { User, Post } from "@/lib/storage";
 
 interface IndexProps {
@@ -46,7 +45,6 @@ const Index = ({
   const [showPostForm, setShowPostForm] = useState(false);
   const [selectedPostType, setSelectedPostType] = useState<'text' | 'image' | 'video' | 'poll' | 'event' | 'job'>('text');
 
-  // Connect sidebar create post button to show post form
   useEffect(() => {
     if (registerCreatePostTrigger) {
       registerCreatePostTrigger(() => handleCreatePost('text'));
@@ -56,19 +54,16 @@ const Index = ({
   const handleCreatePost = (type: 'text' | 'image' | 'video' | 'poll' | 'event' | 'job') => {
     setSelectedPostType(type);
     setShowPostForm(true);
-    // Scroll to post form
     setTimeout(() => {
       document.getElementById('post-form')?.scrollIntoView({ behavior: 'smooth' });
     }, 100);
   };
 
   const handleDislikePost = (postId: string) => {
-    // In a real app, this would update the post's dislike count
     console.log('Dislike post:', postId);
   };
 
   const handleVotePoll = (postId: string, optionIndex: number) => {
-    // In a real app, this would update the poll option votes
     console.log('Vote on poll:', postId, 'option:', optionIndex);
   };
 
@@ -78,11 +73,11 @@ const Index = ({
     postType: string;
     sortBy: string;
   }) => {
-    // In a real app, this would filter posts based on filters
     console.log('Filter change:', filters);
   };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/10 to-background">
+    <div className="min-h-screen bg-background">
       <Header 
         currentUser={currentUser} 
         onSignOut={onSignOut}
@@ -90,10 +85,10 @@ const Index = ({
         onFilterChange={handleFilterChange}
       />
       
-      <div className="container mx-auto px-3 sm:px-4 py-4 max-w-7xl">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6 mt-4 sm:mt-6">
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-7xl">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Main Content */}
-          <div className="lg:col-span-3 space-y-4 sm:space-y-6">
+          <div className="lg:col-span-8 space-y-6">
             {/* Post Form */}
             {showPostForm && currentUser && (
               <div id="post-form" className="animate-fade-in">
@@ -108,7 +103,7 @@ const Index = ({
               </div>
             )}
 
-            {/* Enhanced Feed */}
+            {/* Feed */}
             <div className="animate-fade-in">
               <EnhancedFeed 
                 posts={posts} 
@@ -124,9 +119,8 @@ const Index = ({
             </div>
           </div>
 
-          {/* Enhanced Sidebar */}
-          <div className="space-y-4 sm:space-y-6">
-            {/* Gamification Panel */}
+          {/* Sidebar */}
+          <aside className="lg:col-span-4 space-y-6">
             {currentUser && (
               <GamificationPanel 
                 user={currentUser} 
@@ -152,11 +146,11 @@ const Index = ({
             <LocalCommunity posts={posts} />
             
             <LearningZone user={currentUser} />
-          </div>
+          </aside>
         </div>
-      </div>
+      </main>
 
-      {/* Floating Action Button */}
+      {/* FAB */}
       {currentUser && (
         <FloatingActionButton 
           onCreatePost={handleCreatePost}
