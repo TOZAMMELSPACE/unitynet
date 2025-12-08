@@ -212,7 +212,6 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
         <GlobalHeader 
           currentUser={currentUser} 
           onSignOut={handleSignOut}
-          onCreatePost={handleCreatePost}
         />
         
         {/* Page Content */}
