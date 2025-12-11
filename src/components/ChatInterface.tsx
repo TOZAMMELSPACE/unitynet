@@ -83,44 +83,16 @@ export const ChatInterface = ({ chat, currentUser, onBack, users }: ChatInterfac
     save(STORAGE.CHATS, updatedChats);
 
     setNewMessage("");
-
-    // Simulate auto reply after 2 seconds
-    if (otherParticipant) {
-      setTimeout(() => {
-        const autoReply: Message = {
-          id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
-          chatId: chat.id,
-          senderId: otherParticipant.id,
-          senderName: otherParticipant.name,
-          content: getAutoReply(newMessage.trim()),
-          type: 'text',
-          createdAt: new Date().toISOString(),
-          isRead: false
-        };
-
-        const allMessages = load<Message[]>(STORAGE.MESSAGES, []);
-        const updatedMessages = [...allMessages, autoReply];
-        save(STORAGE.MESSAGES, updatedMessages);
-        setMessages(prev => [...prev, autoReply]);
-
-        const chats = load<Chat[]>(STORAGE.CHATS, []);
-        const updatedChats = chats.map(c => 
-          c.id === chat.id 
-            ? { 
-                ...c, 
-                lastMessage: autoReply.content,
-                lastMessageTime: autoReply.createdAt,
-              }
-            : c
-        );
-        save(STORAGE.CHATS, updatedChats);
-      }, 2000);
-    }
   };
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
+
+    // Only allow images
+    if (!file.type.startsWith('image/')) {
+      return;
+    }
 
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -129,8 +101,8 @@ export const ChatInterface = ({ chat, currentUser, onBack, users }: ChatInterfac
         chatId: chat.id,
         senderId: currentUser.id,
         senderName: currentUser.name,
-        content: `ফাইল পাঠানো হয়েছে: ${file.name}`,
-        type: file.type.startsWith('image/') ? 'image' : 'file',
+        content: '',
+        type: 'image',
         fileUrl: e.target?.result as string,
         fileName: file.name,
         createdAt: new Date().toISOString(),
@@ -141,20 +113,27 @@ export const ChatInterface = ({ chat, currentUser, onBack, users }: ChatInterfac
       const updatedMessages = [...allMessages, message];
       save(STORAGE.MESSAGES, updatedMessages);
       setMessages(prev => [...prev, message]);
+
+      // Update chat
+      const chats = load<Chat[]>(STORAGE.CHATS, []);
+      const updatedChats = chats.map(c => 
+        c.id === chat.id 
+          ? { 
+              ...c, 
+              lastMessage: '📷 ছবি',
+              lastMessageTime: new Date().toISOString(),
+              unreadCount: c.participants.filter(p => p !== currentUser.id).length
+            }
+          : c
+      );
+      save(STORAGE.CHATS, updatedChats);
     };
     reader.readAsDataURL(file);
-  };
-
-  const getAutoReply = (message: string): string => {
-    const bengaliReplies = [
-      "ধন্যবাদ! আমি বুঝতে পেরেছি।",
-      "অবশ্যই! আমি এটি নিয়ে কাজ করব।",
-      "খুবই ভালো প্রস্তাব। চলুন এগিয়ে যাই।",
-      "আপনার সাথে কাজ করতে খুশি লাগছে।",
-      "এটি দারুণ আইডিয়া! আরো জানান।"
-    ];
     
-    return bengaliReplies[Math.floor(Math.random() * bengaliReplies.length)];
+    // Reset input
+    if (event.target) {
+      event.target.value = '';
+    }
   };
 
   const formatTime = (timestamp: string) => {
@@ -253,8 +232,8 @@ export const ChatInterface = ({ chat, currentUser, onBack, users }: ChatInterfac
           <input
             type="file"
             ref={fileInputRef}
-            onChange={handleFileUpload}
-            accept="image/*,application/pdf,.doc,.docx"
+            onChange={handleImageUpload}
+            accept="image/*"
             className="hidden"
           />
           
@@ -262,8 +241,9 @@ export const ChatInterface = ({ chat, currentUser, onBack, users }: ChatInterfac
             variant="ghost" 
             size="icon"
             onClick={() => fileInputRef.current?.click()}
+            title="ছবি পাঠান"
           >
-            <Paperclip size={20} />
+            <Image size={20} />
           </Button>
 
           <div className="flex-1">
