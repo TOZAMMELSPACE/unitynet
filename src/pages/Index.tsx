@@ -26,6 +26,9 @@ interface IndexProps {
   registerCreatePostTrigger?: (trigger: () => void) => void;
   socialActions: any;
   setUsers: (users: User[]) => void;
+  onLoadMore?: () => void;
+  hasMore?: boolean;
+  loadingMore?: boolean;
 }
 
 const Index = ({
@@ -41,6 +44,9 @@ const Index = ({
   registerCreatePostTrigger,
   socialActions,
   setUsers,
+  onLoadMore,
+  hasMore,
+  loadingMore,
 }: IndexProps) => {
   const [showPostForm, setShowPostForm] = useState(false);
   const [selectedPostType, setSelectedPostType] = useState<'text' | 'image' | 'video' | 'poll' | 'event' | 'job'>('text');
@@ -141,6 +147,9 @@ const Index = ({
               onVotePoll={handleVotePoll}
               onSavePost={socialActions.toggleSavePost}
               isPostSaved={socialActions.isPostSaved}
+              onLoadMore={onLoadMore}
+              hasMore={hasMore}
+              loadingMore={loadingMore}
             />
           </div>
         </div>

@@ -68,25 +68,40 @@ export interface CommentWithAuthor {
   };
 }
 
+const POSTS_PER_PAGE = 10;
+
 export const usePosts = (userId?: string, createNotification?: (userId: string, type: string, content: string, postId?: string) => Promise<void>) => {
   const [posts, setPosts] = useState<PostWithAuthor[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchPosts = useCallback(async () => {
+  const fetchPosts = useCallback(async (reset = true) => {
     try {
-      setLoading(true);
+      if (reset) {
+        setLoading(true);
+        setPosts([]);
+      } else {
+        setLoadingMore(true);
+      }
+
+      const offset = reset ? 0 : posts.length;
       
-      // Fetch posts
+      // Fetch posts with pagination
       const { data: postsData, error: postsError } = await supabase
         .from('posts')
         .select('*')
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .range(offset, offset + POSTS_PER_PAGE - 1);
 
       if (postsError) throw postsError;
 
+      // Check if there are more posts
+      setHasMore(postsData?.length === POSTS_PER_PAGE);
+
       if (!postsData || postsData.length === 0) {
-        setPosts([]);
+        if (reset) setPosts([]);
         return;
       }
 
@@ -172,14 +187,25 @@ export const usePosts = (userId?: string, createNotification?: (userId: string, 
         };
       });
 
-      setPosts(transformedPosts);
+      if (reset) {
+        setPosts(transformedPosts);
+      } else {
+        setPosts(prev => [...prev, ...transformedPosts]);
+      }
     } catch (err) {
       console.error('Error fetching posts:', err);
       setError('Failed to load posts');
     } finally {
       setLoading(false);
+      setLoadingMore(false);
     }
-  }, []);
+  }, [posts.length]);
+
+  const loadMore = useCallback(() => {
+    if (!loadingMore && hasMore) {
+      fetchPosts(false);
+    }
+  }, [loadingMore, hasMore, fetchPosts]);
 
   const createPost = useCallback(async (
     content: string,
@@ -393,8 +419,11 @@ export const usePosts = (userId?: string, createNotification?: (userId: string, 
   return {
     posts,
     loading,
+    loadingMore,
+    hasMore,
     error,
     fetchPosts,
+    loadMore,
     createPost,
     likePost,
     addComment,

@@ -30,6 +30,9 @@ interface AppLayoutProps {
     socialActions: ReturnType<typeof useSocial>;
     socialDB: ReturnType<typeof useSocialDB>;
     setUsers: (users: User[]) => void;
+    onLoadMore?: () => void;
+    hasMore?: boolean;
+    loadingMore?: boolean;
   }) => React.ReactNode;
 }
 
@@ -83,7 +86,7 @@ const transformToUser = (profile: LegacyUser): User => ({
 export const AppLayout = ({ children }: AppLayoutProps) => {
   const { user, appUser, loading: authLoading, signOut } = useAuth();
   const socialDB = useSocialDB(user?.id || null);
-  const { posts: dbPosts, createPost, likePost, addComment, likeComment, loading: postsLoading } = usePosts(user?.id, socialDB.createNotification);
+  const { posts: dbPosts, createPost, likePost, addComment, likeComment, loadMore, hasMore, loadingMore, loading: postsLoading } = usePosts(user?.id, socialDB.createNotification);
   const { users: dbUsers, setUsers: setDbUsers, loading: usersLoading } = useProfiles();
   
   const [createPostTrigger, setCreatePostTrigger] = useState<(() => void) | null>(null);
@@ -309,6 +312,9 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
             socialActions,
             socialDB,
             setUsers: setLocalUsers,
+            onLoadMore: loadMore,
+            hasMore: user ? hasMore : false,
+            loadingMore: user ? loadingMore : false,
           })}
       </div>
       
