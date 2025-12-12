@@ -37,7 +37,7 @@ const App = () => (
                 <Route path="/explore" element={<Explore currentUser={props.currentUser} currentUserId={props.currentUserId} users={props.users} onSignOut={props.onSignOut} socialActions={props.socialActions} socialDB={props.socialDB} setUsers={props.setUsers} />} />
                 <Route path="/unity-note" element={<UnityNote currentUser={props.currentUser} users={props.users} onSignOut={props.onSignOut} />} />
                 <Route path="/impact-report" element={<ImpactReport currentUser={props.currentUser} users={props.users} onSignOut={props.onSignOut} />} />
-                <Route path="/profile" element={<Profile currentUser={props.currentUser} onSignOut={props.onSignOut} posts={props.posts} onUpdateProfile={props.onUpdateProfile} />} />
+                <Route path="/profile" element={<Profile currentUser={props.currentUser} onSignOut={props.onSignOut} posts={props.posts} onUpdateProfile={props.onUpdateProfile} users={props.users} socialDB={props.socialDB} />} />
                 <Route path="/groups" element={<Groups currentUser={props.currentUser} onSignOut={props.onSignOut} />} />
                 <Route path="/settings" element={<Settings currentUser={props.currentUser} onSignOut={props.onSignOut} />} />
                 <Route path="/unity-government" element={<UnityGovernment currentUser={props.currentUser} users={props.users} onSignOut={props.onSignOut} />} />
