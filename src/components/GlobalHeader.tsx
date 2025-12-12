@@ -2,7 +2,6 @@ import { User } from "@/lib/storage";
 import { Button } from "@/components/ui/button";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
-import { LanguageToggle } from "@/components/LanguageToggle";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface GlobalHeaderProps {
@@ -34,9 +33,6 @@ export const GlobalHeader = ({ currentUser, onSignOut }: GlobalHeaderProps) => {
 
           {/* Right Actions */}
           <div className="flex items-center gap-3 sm:gap-5">
-            {/* Language Toggle */}
-            <LanguageToggle />
-
             {/* Theme Toggle */}
             <Button
               variant="ghost"

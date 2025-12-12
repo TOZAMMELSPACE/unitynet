@@ -2,7 +2,6 @@ import { NavLink, useLocation } from "react-router-dom";
 import { Home, Bell, User, MessageCircle, Search, Users, Settings, Plus, Coins, Building2, BarChart3, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { LanguageToggle } from "@/components/LanguageToggle";
 
 interface LeftSidebarProps {
   onCreatePost?: () => void;
@@ -86,9 +85,8 @@ export const LeftSidebar = ({ onCreatePost }: LeftSidebarProps) => {
         )}
       </div>
 
-      {/* Bottom section with language toggle and branding */}
-      <div className="mt-auto p-6 border-t border-border space-y-3">
-        <LanguageToggle />
+      {/* Bottom section with branding */}
+      <div className="mt-auto p-6 border-t border-border">
         <p className="text-xs text-muted-foreground text-center">
           Trust • Learn • Unite
         </p>
