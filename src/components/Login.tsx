@@ -10,8 +10,9 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { UserPlus, LogIn, Eye, EyeOff, FileText, Shield, Users, Scale, Lock, Heart, AlertTriangle, Phone } from "lucide-react";
+import { UserPlus, LogIn, Eye, EyeOff, FileText, Shield, Users, Scale, Lock, Heart, AlertTriangle, Phone, Globe } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface LoginProps {
   users: User[];
@@ -44,6 +45,7 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
   const [isRegistering, setIsRegistering] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
+  const { language, toggleLanguage, t } = useLanguage();
 
   const termsContent = [
     { icon: FileText, title: "সেবার শর্তাবলী", titleEn: "Terms of Service", content: "UnityNets প্ল্যাটফর্ম ব্যবহার করে আপনি এই শর্তাবলী মেনে নিচ্ছেন। এটি একটি সম্প্রদায়-ভিত্তিক প্ল্যাটফর্ম যেখানে সদস্যরা পারস্পরিক সহযোগিতার মাধ্যমে সেবা আদান-প্রদান করে।" },
@@ -149,6 +151,21 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-primary/5 via-background to-background flex items-center justify-center p-4">
       <div className="w-full max-w-sm">
+        {/* Language Toggle */}
+        <div className="flex justify-end mb-4">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={toggleLanguage}
+            className="gap-2"
+          >
+            <Globe className="w-4 h-4" />
+            <span className="text-xs font-medium">
+              {language === "en" ? "বাংলা" : "English"}
+            </span>
+          </Button>
+        </div>
+
         {/* Logo & Branding */}
         <div className="text-center mb-8">
           <div className="w-20 h-20 mx-auto mb-4 bg-primary/10 rounded-full flex items-center justify-center">
@@ -158,7 +175,7 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
             UnityNets
           </h1>
           <p className="text-sm text-muted-foreground">
-            একত্রে শক্তিশালী
+            {t("Together We Are Strong", "একত্রে শক্তিশালী")}
           </p>
         </div>
 
@@ -175,7 +192,7 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
                     : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
-                লগইন
+                {t("Login", "লগইন")}
               </button>
               <button
                 type="button"
@@ -186,7 +203,7 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
                     : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
-                নিবন্ধন
+                {t("Register", "নিবন্ধন")}
               </button>
             </div>
 
@@ -195,12 +212,12 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
               <form onSubmit={signupForm.handleSubmit(onSignupSubmit)} className="space-y-4">
                 <div className="space-y-1.5">
                   <Label htmlFor="fullName" className="text-sm font-medium">
-                    আপনার নাম
+                    {t("Your Name", "আপনার নাম")}
                   </Label>
                   <Input
                     id="fullName"
                     type="text"
-                    placeholder="সম্পূর্ণ নাম লিখুন"
+                    placeholder={t("Enter full name", "সম্পূর্ণ নাম লিখুন")}
                     className="h-11"
                     {...signupForm.register("fullName")}
                   />
@@ -213,7 +230,7 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
 
                 <div className="space-y-1.5">
                   <Label htmlFor="phone" className="text-sm font-medium">
-                    মোবাইল নম্বর
+                    {t("Mobile Number", "মোবাইল নম্বর")}
                   </Label>
                   <Input
                     id="phone"
@@ -231,13 +248,13 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
 
                 <div className="space-y-1.5">
                   <Label htmlFor="password" className="text-sm font-medium">
-                    পাসওয়ার্ড
+                    {t("Password", "পাসওয়ার্ড")}
                   </Label>
                   <div className="relative">
                     <Input
                       id="password"
                       type={showPassword ? "text" : "password"}
-                      placeholder="কমপক্ষে ৬ অক্ষর"
+                      placeholder={t("At least 6 characters", "কমপক্ষে ৬ অক্ষর")}
                       className="h-11 pr-10"
                       {...signupForm.register("password")}
                     />
@@ -258,12 +275,12 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
 
                 <div className="space-y-1.5">
                   <Label htmlFor="confirmPassword" className="text-sm font-medium">
-                    পাসওয়ার্ড নিশ্চিত করুন
+                    {t("Confirm Password", "পাসওয়ার্ড নিশ্চিত করুন")}
                   </Label>
                   <Input
                     id="confirmPassword"
                     type="password"
-                    placeholder="আবার পাসওয়ার্ড লিখুন"
+                    placeholder={t("Re-enter password", "আবার পাসওয়ার্ড লিখুন")}
                     className="h-11"
                     {...signupForm.register("confirmPassword")}
                   />
@@ -277,19 +294,19 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
 
                 <Button type="submit" className="w-full h-11" size="lg">
                   <UserPlus className="w-4 h-4 mr-2" />
-                  নিবন্ধন করুন
+                  {t("Register", "নিবন্ধন করুন")}
                 </Button>
 
                 <p className="text-xs text-center text-muted-foreground mt-3">
-                  নিবন্ধন করে আপনি আমাদের{" "}
+                  {t("By registering you agree to our", "নিবন্ধন করে আপনি আমাদের")}{" "}
                   <button 
                     type="button"
                     onClick={() => setShowTerms(true)}
                     className="text-primary hover:underline font-medium"
                   >
-                    শর্তাবলী
+                    {t("Terms & Conditions", "শর্তাবলী")}
                   </button>{" "}
-                  মেনে নিচ্ছেন
+                  {t("", "মেনে নিচ্ছেন")}
                 </p>
               </form>
             ) : (
@@ -297,7 +314,7 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
               <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-4">
                 <div className="space-y-1.5">
                   <Label htmlFor="loginPhone" className="text-sm font-medium">
-                    মোবাইল নম্বর
+                    {t("Mobile Number", "মোবাইল নম্বর")}
                   </Label>
                   <Input
                     id="loginPhone"
@@ -315,13 +332,13 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
 
                 <div className="space-y-1.5">
                   <Label htmlFor="loginPassword" className="text-sm font-medium">
-                    পাসওয়ার্ড
+                    {t("Password", "পাসওয়ার্ড")}
                   </Label>
                   <div className="relative">
                     <Input
                       id="loginPassword"
                       type={showPassword ? "text" : "password"}
-                      placeholder="আপনার পাসওয়ার্ড"
+                      placeholder={t("Your password", "আপনার পাসওয়ার্ড")}
                       className="h-11 pr-10"
                       {...loginForm.register("password")}
                     />
@@ -344,21 +361,21 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
                   <button
                     type="button"
                     className="text-xs text-primary hover:underline"
-                    onClick={() => toast({ title: "শীঘ্রই আসছে", description: "পাসওয়ার্ড রিসেট ফিচার শীঘ্রই আসছে" })}
+                    onClick={() => toast({ title: t("Coming Soon", "শীঘ্রই আসছে"), description: t("Password reset feature coming soon", "পাসওয়ার্ড রিসেট ফিচার শীঘ্রই আসছে") })}
                   >
-                    পাসওয়ার্ড ভুলে গেছেন?
+                    {t("Forgot password?", "পাসওয়ার্ড ভুলে গেছেন?")}
                   </button>
                 </div>
 
                 <Button type="submit" className="w-full h-11" size="lg">
                   <LogIn className="w-4 h-4 mr-2" />
-                  লগইন করুন
+                  {t("Login", "লগইন করুন")}
                 </Button>
 
                 {/* Demo Account Info */}
                 <div className="mt-6 p-3 bg-muted/50 rounded-lg">
                   <p className="text-xs text-center text-muted-foreground mb-2">
-                    ডেমো একাউন্ট দিয়ে প্রবেশ করুন
+                    {t("Enter with demo account", "ডেমো একাউন্ট দিয়ে প্রবেশ করুন")}
                   </p>
                   <div className="flex gap-2">
                     <Button
