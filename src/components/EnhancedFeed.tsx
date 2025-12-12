@@ -33,6 +33,9 @@ interface EnhancedFeedProps {
   onVotePoll?: (postId: string, optionIndex: number) => void;
   onSavePost?: (postId: string) => void;
   isPostSaved?: (postId: string) => boolean;
+  onLoadMore?: () => void;
+  hasMore?: boolean;
+  loadingMore?: boolean;
 }
 
 export const EnhancedFeed = ({ 
@@ -44,7 +47,10 @@ export const EnhancedFeed = ({
   onLikeComment,
   onVotePoll,
   onSavePost,
-  isPostSaved
+  isPostSaved,
+  onLoadMore,
+  hasMore = false,
+  loadingMore = false
 }: EnhancedFeedProps) => {
   const navigate = useNavigate();
   const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set());
@@ -481,6 +487,26 @@ export const EnhancedFeed = ({
               }
             </p>
           </div>
+        </div>
+      )}
+
+      {/* Load More Button */}
+      {hasMore && !loadingMore && filteredAndSortedPosts.length > 0 && (
+        <div className="flex justify-center py-4">
+          <Button 
+            variant="outline" 
+            onClick={onLoadMore}
+            className="w-full max-w-xs"
+          >
+            আরও পোস্ট দেখুন
+          </Button>
+        </div>
+      )}
+
+      {/* Loading More Indicator */}
+      {loadingMore && (
+        <div className="flex justify-center py-4">
+          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
         </div>
       )}
     </div>
