@@ -10,9 +10,10 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { UserPlus, LogIn, Eye, EyeOff, FileText, Shield, Users, Scale, Lock, Heart, AlertTriangle, Phone, Globe } from "lucide-react";
+import { UserPlus, LogIn, Eye, EyeOff, FileText, Shield, Users, Scale, Lock, Heart, AlertTriangle, Phone, Globe, Mail } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { supabase } from "@/integrations/supabase/client";
 
 interface LoginProps {
   users: User[];
@@ -20,11 +21,11 @@ interface LoginProps {
   onRegister: (user: User) => void;
 }
 
-// Simple signup schema - only essential fields
+// Signup schema with email
 const signupSchema = z.object({
   fullName: z.string().min(2, "নাম দিন"),
-  phone: z.string()
-    .regex(/^01\d{9}$/, "সঠিক ফোন নম্বর দিন (01XXXXXXXXX)"),
+  email: z.string().email("সঠিক ইমেইল দিন"),
+  phone: z.string().optional(),
   password: z.string().min(6, "কমপক্ষে ৬ অক্ষর"),
   confirmPassword: z.string(),
 }).refine((data) => data.password === data.confirmPassword, {
@@ -34,7 +35,7 @@ const signupSchema = z.object({
 
 // Login schema
 const loginSchema = z.object({
-  phone: z.string().min(1, "ফোন নম্বর দিন"),
+  email: z.string().email("সঠিক ইমেইল দিন"),
   password: z.string().min(1, "পাসওয়ার্ড দিন"),
 });
 
@@ -45,6 +46,7 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
   const [isRegistering, setIsRegistering] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { language, toggleLanguage, t } = useLanguage();
 
   const termsContent = [
@@ -62,6 +64,7 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
     resolver: zodResolver(signupSchema),
     defaultValues: {
       fullName: "",
+      email: "",
       phone: "",
       password: "",
       confirmPassword: "",
@@ -71,80 +74,93 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
   const loginForm = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      phone: "",
+      email: "",
       password: "",
     },
   });
 
-  const onSignupSubmit = (data: SignupFormData) => {
-    const formattedPhone = `+880${data.phone.substring(1)}`;
+  const onSignupSubmit = async (data: SignupFormData) => {
+    setIsLoading(true);
     
-    // Check if phone already exists
-    const existingPhone = users.find(u => u.phone === formattedPhone);
-    
-    if (existingPhone) {
-      toast({
-        title: "ত্রুটি",
-        description: "এই ফোন নম্বর ইতিমধ্যে নিবন্ধিত",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    const newUser: User = {
-      id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
-      name: data.fullName.trim(),
-      username: data.phone.toLowerCase(),
-      phone: formattedPhone,
-      nidMasked: "****0000",
-      trustScore: 50,
-      followers: 0,
-      following: 0,
-      achievements: ['early_adopter'],
-      isOnline: true,
-      isVerified: false,
-      joinDate: new Date().toISOString()
-    };
     try {
-      onRegister(newUser);
-      onLogin(newUser);
+      const redirectUrl = `${window.location.origin}/`;
       
-      toast({
-        title: "স্বাগতম! 🎉",
-        description: "আপনার একাউন্ট তৈরি হয়েছে"
+      const { data: authData, error } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
+        options: {
+          emailRedirectTo: redirectUrl,
+          data: {
+            full_name: data.fullName.trim(),
+            phone: data.phone || '',
+          },
+        },
       });
+
+      if (error) {
+        if (error.message.includes('already registered')) {
+          toast({
+            title: t("Error", "ত্রুটি"),
+            description: t("This email is already registered", "এই ইমেইল ইতিমধ্যে নিবন্ধিত"),
+            variant: "destructive"
+          });
+        } else {
+          toast({
+            title: t("Error", "ত্রুটি"),
+            description: error.message,
+            variant: "destructive"
+          });
+        }
+        return;
+      }
+
+      toast({
+        title: t("Welcome! 🎉", "স্বাগতম! 🎉"),
+        description: t("Your account has been created", "আপনার একাউন্ট তৈরি হয়েছে")
+      });
+      
     } catch (error) {
       toast({
-        title: "ত্রুটি",
-        description: "একাউন্ট তৈরিতে সমস্যা হয়েছে",
+        title: t("Error", "ত্রুটি"),
+        description: t("Failed to create account", "একাউন্ট তৈরিতে সমস্যা হয়েছে"),
         variant: "destructive"
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const onLoginSubmit = (data: LoginFormData) => {
-    const formattedPhone = data.phone.startsWith('01') 
-      ? `+880${data.phone.substring(1)}`
-      : data.phone;
+  const onLoginSubmit = async (data: LoginFormData) => {
+    setIsLoading(true);
     
-    const user = users.find(u => 
-      u.phone === formattedPhone || 
-      u.phone === data.phone ||
-      u.username === data.phone.toLowerCase()
-    );
-    
-    if (user) {
-      onLogin(user);
-      toast({
-        title: "স্বাগতম!",
-        description: `${user.name}, আপনাকে স্বাগতম`
+    try {
+      const { data: authData, error } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
       });
-    } else {
+
+      if (error) {
+        toast({
+          title: t("Error", "ত্রুটি"),
+          description: t("Invalid email or password", "ইমেইল বা পাসওয়ার্ড ভুল"),
+          variant: "destructive"
+        });
+        return;
+      }
+
       toast({
-        title: "ত্রুটি",
-        description: "ফোন নম্বর বা পাসওয়ার্ড ভুল",
+        title: t("Welcome!", "স্বাগতম!"),
+        description: t("You have successfully logged in", "আপনি সফলভাবে লগইন করেছেন")
+      });
+      
+    } catch (error) {
+      toast({
+        title: t("Error", "ত্রুটি"),
+        description: t("Login failed", "লগইন ব্যর্থ হয়েছে"),
         variant: "destructive"
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -229,8 +245,29 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
                 </div>
 
                 <div className="space-y-1.5">
+                  <Label htmlFor="email" className="text-sm font-medium">
+                    {t("Email", "ইমেইল")}
+                  </Label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder={t("your@email.com", "আপনার@ইমেইল.com")}
+                      className="h-11 pl-10"
+                      {...signupForm.register("email")}
+                    />
+                  </div>
+                  {signupForm.formState.errors.email && (
+                    <p className="text-xs text-destructive">
+                      {signupForm.formState.errors.email.message}
+                    </p>
+                  )}
+                </div>
+
+                <div className="space-y-1.5">
                   <Label htmlFor="phone" className="text-sm font-medium">
-                    {t("Mobile Number", "মোবাইল নম্বর")}
+                    {t("Mobile Number (Optional)", "মোবাইল নম্বর (ঐচ্ছিক)")}
                   </Label>
                   <Input
                     id="phone"
@@ -239,11 +276,6 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
                     className="h-11"
                     {...signupForm.register("phone")}
                   />
-                  {signupForm.formState.errors.phone && (
-                    <p className="text-xs text-destructive">
-                      {signupForm.formState.errors.phone.message}
-                    </p>
-                  )}
                 </div>
 
                 <div className="space-y-1.5">
@@ -291,9 +323,12 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
                   )}
                 </div>
 
-
-                <Button type="submit" className="w-full h-11" size="lg">
-                  <UserPlus className="w-4 h-4 mr-2" />
+                <Button type="submit" className="w-full h-11" size="lg" disabled={isLoading}>
+                  {isLoading ? (
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  ) : (
+                    <UserPlus className="w-4 h-4 mr-2" />
+                  )}
                   {t("Register", "নিবন্ধন করুন")}
                 </Button>
 
@@ -313,19 +348,22 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
               /* Login Form */
               <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-4">
                 <div className="space-y-1.5">
-                  <Label htmlFor="loginPhone" className="text-sm font-medium">
-                    {t("Mobile Number", "মোবাইল নম্বর")}
+                  <Label htmlFor="loginEmail" className="text-sm font-medium">
+                    {t("Email", "ইমেইল")}
                   </Label>
-                  <Input
-                    id="loginPhone"
-                    type="tel"
-                    placeholder="01XXXXXXXXX"
-                    className="h-11"
-                    {...loginForm.register("phone")}
-                  />
-                  {loginForm.formState.errors.phone && (
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Input
+                      id="loginEmail"
+                      type="email"
+                      placeholder={t("your@email.com", "আপনার@ইমেইল.com")}
+                      className="h-11 pl-10"
+                      {...loginForm.register("email")}
+                    />
+                  </div>
+                  {loginForm.formState.errors.email && (
                     <p className="text-xs text-destructive">
-                      {loginForm.formState.errors.phone.message}
+                      {loginForm.formState.errors.email.message}
                     </p>
                   )}
                 </div>
@@ -363,118 +401,58 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
                     className="text-xs text-primary hover:underline"
                     onClick={() => toast({ title: t("Coming Soon", "শীঘ্রই আসছে"), description: t("Password reset feature coming soon", "পাসওয়ার্ড রিসেট ফিচার শীঘ্রই আসছে") })}
                   >
-                    {t("Forgot password?", "পাসওয়ার্ড ভুলে গেছেন?")}
+                    {t("Forgot Password?", "পাসওয়ার্ড ভুলে গেছেন?")}
                   </button>
                 </div>
 
-                <Button type="submit" className="w-full h-11" size="lg">
-                  <LogIn className="w-4 h-4 mr-2" />
+                <Button type="submit" className="w-full h-11" size="lg" disabled={isLoading}>
+                  {isLoading ? (
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  ) : (
+                    <LogIn className="w-4 h-4 mr-2" />
+                  )}
                   {t("Login", "লগইন করুন")}
                 </Button>
-
-                {/* Demo Account Info */}
-                <div className="mt-6 p-3 bg-muted/50 rounded-lg">
-                  <p className="text-xs text-center text-muted-foreground mb-2">
-                    {t("Enter with demo account", "ডেমো একাউন্ট দিয়ে প্রবেশ করুন")}
-                  </p>
-                  <div className="flex gap-2">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      className="flex-1 text-xs h-8"
-                      onClick={() => {
-                        loginForm.setValue("phone", "+8801712345678");
-                        loginForm.setValue("password", "demo123");
-                      }}
-                    >
-                      রহিম
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      className="flex-1 text-xs h-8"
-                      onClick={() => {
-                        loginForm.setValue("phone", "+8801898765432");
-                        loginForm.setValue("password", "demo123");
-                      }}
-                    >
-                      করিম
-                    </Button>
-                  </div>
-                </div>
               </form>
             )}
           </CardContent>
         </Card>
 
-        {/* Footer */}
-        <p className="text-center text-xs text-muted-foreground mt-6">
-          © ২০২৪ UnityNets • Trust • Learn • Unite
-        </p>
-      </div>
-
-      {/* Terms Dialog */}
-      <Dialog open={showTerms} onOpenChange={setShowTerms}>
-        <DialogContent className="max-w-2xl max-h-[85vh]">
-          <DialogHeader>
-            <DialogTitle className="text-xl font-display flex items-center gap-2">
-              <FileText className="w-5 h-5 text-primary" />
-              শর্তাবলী / Terms & Conditions
-            </DialogTitle>
-          </DialogHeader>
-          <ScrollArea className="h-[60vh] pr-4">
-            <div className="space-y-4">
-              <div className="p-3 bg-primary/10 rounded-lg border border-primary/20">
-                <p className="text-sm text-center font-medium">
-                  UnityNets - একত্রে শক্তিশালী
-                </p>
-                <p className="text-xs text-center text-muted-foreground mt-1">
-                  সর্বশেষ আপডেট: ডিসেম্বর ২০২৪
-                </p>
-              </div>
-
-              {termsContent.map((section, index) => (
-                <div key={index} className="p-4 bg-muted/50 rounded-lg border border-border/50">
-                  <div className="flex items-center gap-2 mb-2">
-                    <section.icon className="w-4 h-4 text-primary" />
-                    <h3 className="font-semibold text-sm">
-                      {section.title} <span className="text-muted-foreground font-normal">/ {section.titleEn}</span>
-                    </h3>
+        {/* Terms Dialog */}
+        <Dialog open={showTerms} onOpenChange={setShowTerms}>
+          <DialogContent className="max-w-lg max-h-[80vh]">
+            <DialogHeader>
+              <DialogTitle className="text-xl font-bold">
+                {t("Terms & Conditions", "শর্তাবলী")}
+              </DialogTitle>
+            </DialogHeader>
+            <ScrollArea className="h-[60vh] pr-4">
+              <div className="space-y-6">
+                {termsContent.map((section, index) => (
+                  <div key={index} className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <section.icon className="w-5 h-5 text-primary" />
+                      <h3 className="font-semibold">
+                        {language === "en" ? section.titleEn : section.title}
+                      </h3>
+                    </div>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {section.content}
+                    </p>
                   </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {section.content}
-                  </p>
-                </div>
-              ))}
-
-              <div className="p-4 bg-accent/50 rounded-lg border border-accent">
-                <p className="text-sm text-center">
-                  ✅ উপরের শর্তাবলী পড়ে বুঝে নিবন্ধন করুন
-                </p>
-                <p className="text-xs text-center text-muted-foreground mt-1">
-                  By registering, you agree to all terms above
-                </p>
+                ))}
               </div>
-            </div>
-          </ScrollArea>
-          <div className="flex gap-2 pt-2">
-            <Button 
-              variant="outline" 
-              className="flex-1"
-              onClick={() => setShowTerms(false)}
-            >
-              বন্ধ করুন
-            </Button>
-            <Link to="/terms" className="flex-1">
-              <Button className="w-full" onClick={() => setShowTerms(false)}>
-                সম্পূর্ণ পড়ুন
-              </Button>
-            </Link>
-          </div>
-        </DialogContent>
-      </Dialog>
+            </ScrollArea>
+          </DialogContent>
+        </Dialog>
+
+        {/* Footer */}
+        <div className="mt-6 text-center">
+          <p className="text-xs text-muted-foreground">
+            © 2025 UnityNets. {t("All rights reserved.", "সর্বস্বত্ব সংরক্ষিত।")}
+          </p>
+        </div>
+      </div>
     </div>
   );
 };
