@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ProfileEdit } from "@/components/ProfileEdit";
 import { ProfileBadges } from "@/components/ProfileBadges";
 import { PortfolioSection } from "@/components/PortfolioSection";
@@ -9,35 +11,121 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { supabase } from "@/integrations/supabase/client";
+import { useSocialDB } from "@/hooks/useSocialDB";
 
 interface ProfileProps {
   currentUser: User | null;
   onSignOut: () => void;
   posts: Post[];
   onUpdateProfile: (user: User) => void;
+  users?: User[];
+  socialDB?: ReturnType<typeof useSocialDB>;
 }
 
-export default function Profile({ currentUser, onSignOut, posts, onUpdateProfile }: ProfileProps) {
-  if (!currentUser) {
-    return <div>Loading...</div>;
+export default function Profile({ currentUser, onSignOut, posts, onUpdateProfile, users = [], socialDB }: ProfileProps) {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [viewedProfile, setViewedProfile] = useState<User | null>(null);
+  const [loading, setLoading] = useState(false);
+  
+  // Get userId from route state (when clicking on another user's profile)
+  const viewUserId = location.state?.userId;
+  const isOwnProfile = !viewUserId || viewUserId === currentUser?.id;
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (isOwnProfile || !viewUserId) {
+        setViewedProfile(null);
+        return;
+      }
+
+      setLoading(true);
+      try {
+        // First check in the users array
+        const foundUser = users.find(u => u.id === viewUserId);
+        if (foundUser) {
+          setViewedProfile(foundUser);
+          setLoading(false);
+          return;
+        }
+
+        // Otherwise fetch from database
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('user_id', viewUserId)
+          .maybeSingle();
+
+        if (data) {
+          const profile: User = {
+            id: data.user_id,
+            name: data.full_name,
+            username: data.full_name.toLowerCase().replace(/\s+/g, ''),
+            phone: data.phone || '',
+            nidMasked: '****',
+            profileImage: data.avatar_url || undefined,
+            bio: data.bio || undefined,
+            location: data.location || undefined,
+            trustScore: data.trust_score || 0,
+            followers: 0,
+            following: 0,
+            achievements: [],
+            isOnline: false,
+            isVerified: true,
+            joinDate: data.created_at,
+            unityBalance: data.unity_notes || 0,
+          };
+          setViewedProfile(profile);
+        }
+      } catch (err) {
+        console.error('Error fetching profile:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserProfile();
+  }, [viewUserId, isOwnProfile, users]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  // Use viewed profile if viewing someone else, otherwise use current user
+  const displayUser = isOwnProfile ? currentUser : viewedProfile;
+
+  if (!displayUser) {
+    return (
+      <div className="container mx-auto px-4 py-6 text-center">
+        <p className="text-bengali">প্রোফাইল পাওয়া যায়নি</p>
+        <Button onClick={() => navigate('/')} className="mt-4">
+          হোম পেইজে যান
+        </Button>
+      </div>
+    );
   }
 
   // Initialize missing fields with defaults
   const user: User = {
-    ...currentUser,
-    username: currentUser.username || `user_${currentUser.id}`,
-    bio: currentUser.bio || "",
-    location: currentUser.location || "",
-    role: currentUser.role || "user",
-    followers: currentUser.followers || 0,
-    following: currentUser.following || 0,
-    achievements: currentUser.achievements || ["trusted_member", "early_adopter"],
-    portfolioItems: currentUser.portfolioItems || [],
-    lastOnline: currentUser.lastOnline || new Date().toISOString(),
-    isOnline: currentUser.isOnline ?? true,
-    isVerified: currentUser.isVerified ?? true,
-    joinDate: currentUser.joinDate || new Date().toISOString(),
-    privacySettings: currentUser.privacySettings || {
+    ...displayUser,
+    username: displayUser.username || `user_${displayUser.id}`,
+    bio: displayUser.bio || "",
+    location: displayUser.location || "",
+    role: displayUser.role || "user",
+    followers: displayUser.followers || 0,
+    following: displayUser.following || 0,
+    achievements: displayUser.achievements || ["trusted_member", "early_adopter"],
+    portfolioItems: displayUser.portfolioItems || [],
+    lastOnline: displayUser.lastOnline || new Date().toISOString(),
+    isOnline: displayUser.isOnline ?? true,
+    isVerified: displayUser.isVerified ?? true,
+    joinDate: displayUser.joinDate || new Date().toISOString(),
+    privacySettings: displayUser.privacySettings || {
       allowMessagesFrom: 'everyone',
       showLastOnline: true,
       showEmail: false,
@@ -45,7 +133,7 @@ export default function Profile({ currentUser, onSignOut, posts, onUpdateProfile
     }
   };
 
-  const userPosts = posts.filter(post => post.author.name === user.name);
+  const userPosts = posts.filter(post => post.author.name === user.name || post.author.id === user.id);
   const totalLikes = userPosts.reduce((sum, post) => sum + (post.likes || 0), 0);
 
   const handleUpdateProfile = (updatedUser: User) => {
@@ -57,6 +145,22 @@ export default function Profile({ currentUser, onSignOut, posts, onUpdateProfile
       ...user,
       privacySettings: settings
     });
+  };
+
+  const handleFollow = async () => {
+    if (socialDB && viewUserId) {
+      await socialDB.followUser(viewUserId);
+    }
+  };
+
+  const handleSendMessage = () => {
+    navigate('/messages', { state: { startChatWith: viewUserId } });
+  };
+
+  const handleSendFriendRequest = async () => {
+    if (socialDB && viewUserId) {
+      await socialDB.sendFriendRequest(viewUserId);
+    }
   };
 
   const getRoleText = (role: string) => {
@@ -144,11 +248,30 @@ export default function Profile({ currentUser, onSignOut, posts, onUpdateProfile
                   </div>
 
                   <div className="flex gap-2">
-                    <ProfileEdit user={user} onUpdateProfile={handleUpdateProfile} />
-                    <PrivacySettings 
-                      privacySettings={user.privacySettings!} 
-                      onUpdatePrivacy={handleUpdatePrivacy} 
-                    />
+                    {isOwnProfile ? (
+                      <>
+                        <ProfileEdit user={user} onUpdateProfile={handleUpdateProfile} />
+                        <PrivacySettings 
+                          privacySettings={user.privacySettings!} 
+                          onUpdatePrivacy={handleUpdatePrivacy} 
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <Button onClick={handleFollow} className="gap-2">
+                          <UserPlus className="w-4 h-4" />
+                          <span className="text-bengali">ফলো করুন</span>
+                        </Button>
+                        <Button onClick={handleSendMessage} variant="outline" className="gap-2">
+                          <MessageCircle className="w-4 h-4" />
+                          <span className="text-bengali">মেসেজ</span>
+                        </Button>
+                        <Button onClick={handleSendFriendRequest} variant="outline" className="gap-2">
+                          <Users className="w-4 h-4" />
+                          <span className="text-bengali">বন্ধু রিকোয়েস্ট</span>
+                        </Button>
+                      </>
+                    )}
                   </div>
                 </div>
 
