@@ -2,6 +2,8 @@ import { User } from "@/lib/storage";
 import { Button } from "@/components/ui/button";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
+import { LanguageToggle } from "@/components/LanguageToggle";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface GlobalHeaderProps {
   currentUser: User | null;
@@ -10,6 +12,7 @@ interface GlobalHeaderProps {
 
 export const GlobalHeader = ({ currentUser, onSignOut }: GlobalHeaderProps) => {
   const { theme, setTheme } = useTheme();
+  const { t } = useLanguage();
 
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
@@ -25,12 +28,15 @@ export const GlobalHeader = ({ currentUser, onSignOut }: GlobalHeaderProps) => {
               Unity<span className="text-primary">Nets</span>
             </h1>
             <span className="text-xs sm:text-sm text-muted-foreground font-medium tracking-wide">
-              Trust • Learn • Unite
+              {t("Trust • Learn • Unite", "একত্রে শক্তিশালী")}
             </span>
           </div>
 
           {/* Right Actions */}
-          <div className="flex items-center gap-4 sm:gap-6">
+          <div className="flex items-center gap-3 sm:gap-5">
+            {/* Language Toggle */}
+            <LanguageToggle />
+
             {/* Theme Toggle */}
             <Button
               variant="ghost"
@@ -51,7 +57,7 @@ export const GlobalHeader = ({ currentUser, onSignOut }: GlobalHeaderProps) => {
                     {currentUser.name}
                   </span>
                   <span className="text-xs text-primary font-medium">
-                    Score: {Math.round(currentUser.trustScore)}
+                    {t("Score", "স্কোর")}: {Math.round(currentUser.trustScore)}
                   </span>
                 </div>
                 <div className="flex sm:hidden flex-col items-end">
@@ -68,12 +74,12 @@ export const GlobalHeader = ({ currentUser, onSignOut }: GlobalHeaderProps) => {
                   size="sm"
                   className="font-medium"
                 >
-                  Sign Out
+                  {t("Sign Out", "সাইন আউট")}
                 </Button>
               </div>
             ) : (
               <Button variant="default" size="sm">
-                Sign In
+                {t("Sign In", "সাইন ইন")}
               </Button>
             )}
           </div>
