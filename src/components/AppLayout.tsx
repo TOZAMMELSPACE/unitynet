@@ -5,6 +5,9 @@ import { LeftSidebar } from "@/components/LeftSidebar";
 import { Login } from "@/components/Login";
 import { useSocial } from "@/hooks/useSocial";
 import { GlobalHeader } from "@/components/GlobalHeader";
+import { useAuth } from "@/hooks/useAuth";
+import { usePosts, PostWithAuthor } from "@/hooks/usePosts";
+import { useProfiles, LegacyUser } from "@/hooks/useProfiles";
 
 interface AppLayoutProps {
   children: (props: {
@@ -27,14 +30,99 @@ interface AppLayoutProps {
   }) => React.ReactNode;
 }
 
-export const AppLayout = ({ children }: AppLayoutProps) => {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [users, setUsers] = useState<User[]>([]);
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [comments, setComments] = useState<Comment[]>([]);
-  const [createPostTrigger, setCreatePostTrigger] = useState<(() => void) | null>(null);
+// Transform PostWithAuthor to legacy Post format
+const transformToLegacyPost = (post: PostWithAuthor): Post => ({
+  id: post.id,
+  author: post.author,
+  content: post.content,
+  images: post.images,
+  community: post.community,
+  postType: post.postType,
+  createdAt: post.createdAt,
+  likes: post.likes,
+  dislikes: post.dislikes,
+  views: post.views,
+  comments: post.comments.map(c => ({
+    id: c.id,
+    postId: c.postId,
+    author: c.author,
+    content: c.content,
+    createdAt: c.createdAt,
+    likes: c.likes,
+  })),
+});
 
-  const socialActions = useSocial(currentUser, users, setUsers);
+// Transform LegacyUser to User format
+const transformToUser = (profile: LegacyUser): User => ({
+  id: profile.id,
+  name: profile.name,
+  username: profile.username,
+  phone: profile.phone,
+  email: profile.email,
+  nidMasked: profile.nidMasked,
+  profileImage: profile.profileImage,
+  bio: profile.bio,
+  location: profile.location,
+  trustScore: profile.trustScore,
+  followers: profile.followers,
+  following: profile.following,
+  followersList: profile.followersList,
+  followingList: profile.followingList,
+  friendRequests: profile.friendRequests,
+  savedPosts: profile.savedPosts,
+  achievements: profile.achievements,
+  isOnline: profile.isOnline,
+  isVerified: profile.isVerified,
+  joinDate: profile.joinDate,
+  unityBalance: profile.unityBalance,
+});
+
+export const AppLayout = ({ children }: AppLayoutProps) => {
+  const { user, appUser, loading: authLoading, signOut } = useAuth();
+  const { posts: dbPosts, createPost, likePost, addComment, likeComment, loading: postsLoading } = usePosts(user?.id);
+  const { users: dbUsers, setUsers: setDbUsers, loading: usersLoading } = useProfiles();
+  
+  const [createPostTrigger, setCreatePostTrigger] = useState<(() => void) | null>(null);
+  
+  // Also keep local storage for backwards compatibility during transition
+  const [localUsers, setLocalUsers] = useState<User[]>([]);
+  const [localPosts, setLocalPosts] = useState<Post[]>([]);
+  const [comments, setComments] = useState<Comment[]>([]);
+
+  // Transform appUser to legacy User format
+  const currentUser: User | null = appUser ? {
+    id: appUser.id,
+    name: appUser.name,
+    username: appUser.username,
+    phone: appUser.phone,
+    email: appUser.email,
+    nidMasked: '****',
+    profileImage: appUser.profileImage,
+    bio: appUser.bio,
+    location: appUser.location,
+    trustScore: appUser.trustScore,
+    followers: appUser.followers,
+    following: appUser.following,
+    achievements: appUser.achievements,
+    isOnline: appUser.isOnline,
+    isVerified: appUser.isVerified,
+    joinDate: appUser.joinDate,
+    unityBalance: appUser.unityNotes,
+  } : null;
+
+  // Combine DB users with local users
+  const users: User[] = dbUsers.length > 0 
+    ? dbUsers.map(transformToUser)
+    : localUsers;
+
+  // Combine DB posts with local posts
+  const posts: Post[] = dbPosts.length > 0 
+    ? dbPosts.map(transformToLegacyPost)
+    : localPosts;
+
+  const socialActions = useSocial(currentUser, users, (updatedUsers) => {
+    setLocalUsers(updatedUsers);
+  });
 
   useEffect(() => {
     initializeData();
@@ -42,147 +130,118 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
     const savedUsers = load<User[]>(STORAGE.USERS, []);
     const savedPosts = load<Post[]>(STORAGE.POSTS, []);
     const savedComments = load<Comment[]>(STORAGE.COMMENTS, []);
-    setUsers(savedUsers);
-    setPosts(savedPosts);
+    setLocalUsers(savedUsers);
+    setLocalPosts(savedPosts);
     setComments(savedComments);
-
-    const savedUser = localStorage.getItem(STORAGE.CURRENT_USER);
-    if (savedUser) {
-      try {
-        setCurrentUser(JSON.parse(savedUser));
-      } catch (error) {
-        console.error('Error parsing saved user:', error);
-      }
-    }
   }, []);
 
   const handleLogin = (user: User) => {
-    setCurrentUser(user);
-    save(STORAGE.CURRENT_USER, user);
+    // This is now handled by useAuth
   };
 
-  const handleSignOut = () => {
-    setCurrentUser(null);
-    localStorage.removeItem(STORAGE.CURRENT_USER);
+  const handleSignOut = async () => {
+    await signOut();
   };
 
   const handleRegister = (user: User) => {
-    const updatedUsers = [...users, user];
-    setUsers(updatedUsers);
-    save(STORAGE.USERS, updatedUsers);
-    handleLogin(user);
+    // This is now handled by useAuth
   };
 
-  const handlePostCreated = (post: Post) => {
-    const updatedPosts = [post, ...posts];
-    setPosts(updatedPosts);
-    save(STORAGE.POSTS, updatedPosts);
-
-    // Update user trust score
-    if (currentUser) {
-      const updatedUser = { ...currentUser, trustScore: currentUser.trustScore + 2 };
-      setCurrentUser(updatedUser);
-      save(STORAGE.CURRENT_USER, updatedUser);
-
-      const updatedUsers = users.map(u => 
-        u.id === currentUser.id ? updatedUser : u
+  const handlePostCreated = async (post: Post) => {
+    if (user) {
+      // Save to database
+      await createPost(
+        post.content,
+        post.images,
+        post.community
       );
-      setUsers(updatedUsers);
-      save(STORAGE.USERS, updatedUsers);
+    } else {
+      // Fallback to local storage
+      const updatedPosts = [post, ...localPosts];
+      setLocalPosts(updatedPosts);
+      save(STORAGE.POSTS, updatedPosts);
     }
   };
 
-  const handleLikePost = (postId: string) => {
-    const updatedPosts = posts.map(post => 
-      post.id === postId 
-        ? { ...post, likes: (post.likes || 0) + 1 }
-        : post
-    );
-    setPosts(updatedPosts);
-    save(STORAGE.POSTS, updatedPosts);
+  const handleLikePost = async (postId: string) => {
+    if (user) {
+      await likePost(postId);
+    } else {
+      // Fallback to local
+      const updatedPosts = localPosts.map(post => 
+        post.id === postId 
+          ? { ...post, likes: (post.likes || 0) + 1 }
+          : post
+      );
+      setLocalPosts(updatedPosts);
+      save(STORAGE.POSTS, updatedPosts);
+    }
   };
 
-  const handleAddComment = (postId: string, content: string) => {
-    if (!currentUser) return;
+  const handleAddComment = async (postId: string, content: string) => {
+    if (user && currentUser) {
+      await addComment(postId, content);
+    } else if (currentUser) {
+      // Fallback to local
+      const newComment: Comment = {
+        id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+        postId,
+        author: { id: currentUser.id, name: currentUser.name },
+        content,
+        createdAt: new Date().toISOString(),
+        likes: 0
+      };
 
-    const newComment: Comment = {
-      id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
-      postId,
-      author: { id: currentUser.id, name: currentUser.name },
-      content,
-      createdAt: new Date().toISOString(),
-      likes: 0
-    };
+      const updatedComments = [...comments, newComment];
+      setComments(updatedComments);
+      save(STORAGE.COMMENTS, updatedComments);
 
-    const updatedComments = [...comments, newComment];
-    setComments(updatedComments);
-    save(STORAGE.COMMENTS, updatedComments);
-
-    // Update post with comment
-    const updatedPosts = posts.map(post => 
-      post.id === postId 
-        ? { ...post, comments: [...post.comments, newComment] }
-        : post
-    );
-    setPosts(updatedPosts);
-    save(STORAGE.POSTS, updatedPosts);
-
-    // Update user trust score for commenting
-    const updatedUser = { ...currentUser, trustScore: currentUser.trustScore + 1 };
-    setCurrentUser(updatedUser);
-    save(STORAGE.CURRENT_USER, updatedUser);
-
-    const updatedUsers = users.map(u => 
-      u.id === currentUser.id ? updatedUser : u
-    );
-    setUsers(updatedUsers);
-    save(STORAGE.USERS, updatedUsers);
+      const updatedPosts = localPosts.map(post => 
+        post.id === postId 
+          ? { ...post, comments: [...post.comments, newComment] }
+          : post
+      );
+      setLocalPosts(updatedPosts);
+      save(STORAGE.POSTS, updatedPosts);
+    }
   };
 
-  const handleLikeComment = (commentId: string) => {
-    const updatedComments = comments.map(comment => 
-      comment.id === commentId 
-        ? { ...comment, likes: comment.likes + 1 }
-        : comment
-    );
-    setComments(updatedComments);
-    save(STORAGE.COMMENTS, updatedComments);
-
-    // Update posts with updated comments
-    const updatedPosts = posts.map(post => ({
-      ...post,
-      comments: post.comments.map(comment => 
+  const handleLikeComment = async (commentId: string) => {
+    if (user) {
+      await likeComment(commentId);
+    } else {
+      // Fallback to local
+      const updatedComments = comments.map(comment => 
         comment.id === commentId 
           ? { ...comment, likes: comment.likes + 1 }
           : comment
-      )
-    }));
-    setPosts(updatedPosts);
-    save(STORAGE.POSTS, updatedPosts);
+      );
+      setComments(updatedComments);
+      save(STORAGE.COMMENTS, updatedComments);
+
+      const updatedPosts = localPosts.map(post => ({
+        ...post,
+        comments: post.comments.map(comment => 
+          comment.id === commentId 
+            ? { ...comment, likes: comment.likes + 1 }
+            : comment
+        )
+      }));
+      setLocalPosts(updatedPosts);
+      save(STORAGE.POSTS, updatedPosts);
+    }
   };
 
   const handleUpdateProfile = (updatedUser: User) => {
-    setCurrentUser(updatedUser);
-    save(STORAGE.CURRENT_USER, updatedUser);
-
-    const updatedUsers = users.map(u => 
+    // Update local state
+    const updatedUsers = localUsers.map(u => 
       u.id === updatedUser.id ? updatedUser : u
     );
-    setUsers(updatedUsers);
+    setLocalUsers(updatedUsers);
     save(STORAGE.USERS, updatedUsers);
-
-    // Update posts with new user name and profile image
-    const updatedPosts = posts.map(post => 
-      post.author.id === updatedUser.id 
-        ? { ...post, author: { ...post.author, name: updatedUser.name, profileImage: updatedUser.profileImage } }
-        : post
-    );
-    setPosts(updatedPosts);
-    save(STORAGE.POSTS, updatedPosts);
   };
 
   const handleCreatePost = () => {
-    // Trigger the child component's create post function
     if (createPostTrigger) {
       createPostTrigger();
     }
@@ -192,12 +251,21 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
     setCreatePostTrigger(() => trigger);
   };
 
-  if (!currentUser) {
+  // Show loading state
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (!user) {
     return (
       <Login 
         onLogin={handleLogin}
         onRegister={handleRegister}
-        users={users}
+        users={localUsers}
       />
     );
   }
@@ -210,7 +278,7 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
       <div className="w-full lg:pl-64 min-h-screen pb-20 lg:pb-0">
         {/* Global Header - same on all pages */}
         <GlobalHeader 
-          currentUser={currentUser} 
+          currentUser={currentUser!} 
           onSignOut={handleSignOut}
         />
         
@@ -231,7 +299,7 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
             onCreatePost: handleCreatePost,
             registerCreatePostTrigger,
             socialActions,
-            setUsers,
+            setUsers: setLocalUsers,
           })}
       </div>
       
