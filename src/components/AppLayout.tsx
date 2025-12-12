@@ -42,6 +42,7 @@ const transformToLegacyPost = (post: PostWithAuthor): Post => ({
   author: post.author,
   content: post.content,
   images: post.images,
+  videoUrl: post.videoUrl,
   community: post.community,
   postType: post.postType,
   createdAt: post.createdAt,
