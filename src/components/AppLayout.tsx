@@ -33,6 +33,7 @@ interface AppLayoutProps {
     onLoadMore?: () => void;
     hasMore?: boolean;
     loadingMore?: boolean;
+    onTrackView?: (postId: string) => void;
   }) => React.ReactNode;
 }
 
@@ -89,7 +90,7 @@ const transformToUser = (profile: LegacyUser): User => ({
 export const AppLayout = ({ children }: AppLayoutProps) => {
   const { user, appUser, loading: authLoading, signOut } = useAuth();
   const socialDB = useSocialDB(user?.id || null);
-  const { posts: dbPosts, createPost, likePost, addComment, likeComment, loadMore, hasMore, loadingMore, loading: postsLoading } = usePosts(user?.id, socialDB.createNotification);
+  const { posts: dbPosts, createPost, likePost, addComment, likeComment, loadMore, hasMore, loadingMore, trackView, loading: postsLoading } = usePosts(user?.id, socialDB.createNotification);
   const { users: dbUsers, setUsers: setDbUsers, loading: usersLoading } = useProfiles();
   
   const [createPostTrigger, setCreatePostTrigger] = useState<(() => void) | null>(null);
@@ -322,6 +323,7 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
             onLoadMore: loadMore,
             hasMore: user ? hasMore : false,
             loadingMore: user ? loadingMore : false,
+            onTrackView: user ? trackView : undefined,
           })}
       </div>
       

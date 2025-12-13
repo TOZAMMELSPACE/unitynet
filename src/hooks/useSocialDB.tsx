@@ -367,6 +367,24 @@ export const useSocialDB = (currentUserId: string | null) => {
     }
   }, [currentUserId, fetchFollows, fetchFriendRequests, fetchNotifications, fetchSavedPosts]);
 
+  // Get follower/following counts for a specific user
+  const getFollowCounts = useCallback(async (targetUserId: string) => {
+    try {
+      const [followingRes, followersRes] = await Promise.all([
+        supabase.from('follows').select('id', { count: 'exact' }).eq('follower_id', targetUserId),
+        supabase.from('follows').select('id', { count: 'exact' }).eq('following_id', targetUserId)
+      ]);
+
+      return {
+        following: followingRes.count || 0,
+        followers: followersRes.count || 0,
+      };
+    } catch (error) {
+      console.error('Error getting follow counts:', error);
+      return { following: 0, followers: 0 };
+    }
+  }, []);
+
   return {
     following,
     followers,
@@ -385,6 +403,7 @@ export const useSocialDB = (currentUserId: string | null) => {
     isPostSaved,
     markNotificationRead,
     createNotification,
-    fetchNotifications
+    fetchNotifications,
+    getFollowCounts,
   };
 };

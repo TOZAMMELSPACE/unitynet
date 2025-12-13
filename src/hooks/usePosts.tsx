@@ -462,6 +462,41 @@ export const usePosts = (userId?: string, createNotification?: (userId: string, 
     }
   }, []);
 
+  // Track unique view for a post
+  const trackView = useCallback(async (postId: string) => {
+    if (!userId) return;
+
+    try {
+      // Try to insert a new view (will fail if already viewed due to unique constraint)
+      const { error } = await supabase
+        .from('post_views')
+        .insert({
+          post_id: postId,
+          user_id: userId,
+        });
+
+      // If successful (new view), increment the views count
+      if (!error) {
+        const currentPost = posts.find(p => p.id === postId);
+        await supabase
+          .from('posts')
+          .update({ views_count: (currentPost?.views || 0) + 1 })
+          .eq('id', postId);
+
+        // Optimistic update
+        setPosts(prev => prev.map(post => 
+          post.id === postId 
+            ? { ...post, views: post.views + 1 }
+            : post
+        ));
+      }
+      // If error (duplicate), user already viewed - do nothing
+    } catch (err) {
+      // Silently fail - duplicate view is expected behavior
+      console.log('View already tracked or error:', err);
+    }
+  }, [userId, posts]);
+
   useEffect(() => {
     fetchPosts(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -479,5 +514,6 @@ export const usePosts = (userId?: string, createNotification?: (userId: string, 
     likePost,
     addComment,
     likeComment,
+    trackView,
   };
 };

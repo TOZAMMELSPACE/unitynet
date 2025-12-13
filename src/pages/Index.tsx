@@ -32,6 +32,7 @@ interface IndexProps {
   onLoadMore?: () => void;
   hasMore?: boolean;
   loadingMore?: boolean;
+  onTrackView?: (postId: string) => void;
 }
 
 const Index = ({
@@ -50,6 +51,7 @@ const Index = ({
   onLoadMore,
   hasMore,
   loadingMore,
+  onTrackView,
 }: IndexProps) => {
   const [showPostForm, setShowPostForm] = useState(false);
   const [selectedPostType, setSelectedPostType] = useState<'text' | 'image' | 'video' | 'poll' | 'event' | 'job'>('text');
@@ -153,6 +155,7 @@ const Index = ({
               onLoadMore={onLoadMore}
               hasMore={hasMore}
               loadingMore={loadingMore}
+              onTrackView={onTrackView}
             />
           </div>
         </div>
