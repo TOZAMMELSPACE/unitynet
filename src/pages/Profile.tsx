@@ -28,6 +28,8 @@ export default function Profile({ currentUser, onSignOut, posts, onUpdateProfile
   const navigate = useNavigate();
   const [viewedProfile, setViewedProfile] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
+  const [followerCount, setFollowerCount] = useState(0);
+  const [followingCount, setFollowingCount] = useState(0);
   
   // Get userId from route state (when clicking on another user's profile)
   const viewUserId = location.state?.userId;
@@ -37,6 +39,12 @@ export default function Profile({ currentUser, onSignOut, posts, onUpdateProfile
     const fetchUserProfile = async () => {
       if (isOwnProfile || !viewUserId) {
         setViewedProfile(null);
+        // Fetch follower counts for current user
+        if (currentUser?.id && socialDB?.getFollowCounts) {
+          const counts = await socialDB.getFollowCounts(currentUser.id);
+          setFollowerCount(counts.followers);
+          setFollowingCount(counts.following);
+        }
         return;
       }
 
@@ -46,6 +54,12 @@ export default function Profile({ currentUser, onSignOut, posts, onUpdateProfile
         const foundUser = users.find(u => u.id === viewUserId);
         if (foundUser) {
           setViewedProfile(foundUser);
+          // Fetch follower counts for viewed user
+          if (socialDB?.getFollowCounts) {
+            const counts = await socialDB.getFollowCounts(viewUserId);
+            setFollowerCount(counts.followers);
+            setFollowingCount(counts.following);
+          }
           setLoading(false);
           return;
         }
@@ -79,6 +93,13 @@ export default function Profile({ currentUser, onSignOut, posts, onUpdateProfile
             unityBalance: data.unity_notes || 0,
           };
           setViewedProfile(profile);
+
+          // Fetch follower counts
+          if (socialDB?.getFollowCounts) {
+            const counts = await socialDB.getFollowCounts(viewUserId);
+            setFollowerCount(counts.followers);
+            setFollowingCount(counts.following);
+          }
         }
       } catch (err) {
         console.error('Error fetching profile:', err);
@@ -88,7 +109,7 @@ export default function Profile({ currentUser, onSignOut, posts, onUpdateProfile
     };
 
     fetchUserProfile();
-  }, [viewUserId, isOwnProfile, users]);
+  }, [viewUserId, isOwnProfile, users, currentUser?.id, socialDB]);
 
   if (loading) {
     return (
@@ -309,11 +330,11 @@ export default function Profile({ currentUser, onSignOut, posts, onUpdateProfile
                     <div className="text-sm text-muted-foreground text-bengali">পোস্ট</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-xl font-bold">{user.followers}</div>
+                    <div className="text-xl font-bold">{followerCount}</div>
                     <div className="text-sm text-muted-foreground text-bengali">ফলোয়ার</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-xl font-bold">{user.following}</div>
+                    <div className="text-xl font-bold">{followingCount}</div>
                     <div className="text-sm text-muted-foreground text-bengali">ফলোয়িং</div>
                   </div>
                   <div className="text-center">

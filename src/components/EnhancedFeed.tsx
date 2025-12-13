@@ -39,6 +39,7 @@ interface EnhancedFeedProps {
   onLoadMore?: () => void;
   hasMore?: boolean;
   loadingMore?: boolean;
+  onTrackView?: (postId: string) => void;
 }
 
 export const EnhancedFeed = ({ 
@@ -53,17 +54,27 @@ export const EnhancedFeed = ({
   isPostSaved,
   onLoadMore,
   hasMore = false,
-  loadingMore = false
+  loadingMore = false,
+  onTrackView
 }: EnhancedFeedProps) => {
   const navigate = useNavigate();
   const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set());
   const [dislikedPosts, setDislikedPosts] = useState<Set<string>>(new Set());
+  const [viewedPosts, setViewedPosts] = useState<Set<string>>(new Set());
   const [filters, setFilters] = useState({
     search: "",
     community: "all",
     postType: "all",
     sortBy: "recent"
   });
+
+  // Track views when posts become visible
+  const handlePostVisible = (postId: string) => {
+    if (!viewedPosts.has(postId) && onTrackView) {
+      setViewedPosts(prev => new Set(prev).add(postId));
+      onTrackView(postId);
+    }
+  };
 
   const filteredAndSortedPosts = useMemo(() => {
     let filtered = posts.filter(post => {
@@ -280,7 +291,12 @@ export const EnhancedFeed = ({
   return (
     <div className="space-y-4">
       {filteredAndSortedPosts.map((post) => (
-        <article key={post.id} className="bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden">
+        <article 
+          key={post.id} 
+          className="bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden"
+          onMouseEnter={() => handlePostVisible(post.id)}
+          onTouchStart={() => handlePostVisible(post.id)}
+        >
           {/* Post Header */}
           <div className="p-4 pb-3">
             <div className="flex justify-between items-start">
@@ -425,7 +441,7 @@ export const EnhancedFeed = ({
               )}
               <span className="flex items-center gap-1">
                 <Eye className="w-3.5 h-3.5" />
-                {post.views || Math.floor(Math.random() * 100) + 10}
+                {post.views || 0}
               </span>
             </div>
           </div>
