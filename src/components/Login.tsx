@@ -19,7 +19,6 @@ interface LoginProps {
   onRegister: (user: User) => void;
 }
 
-// Signup schema with email
 const signupSchema = z.object({
   fullName: z.string().min(2, "নাম দিন"),
   email: z.string().email("সঠিক ইমেইল দিন"),
@@ -31,7 +30,6 @@ const signupSchema = z.object({
   path: ["confirmPassword"],
 });
 
-// Login schema
 const loginSchema = z.object({
   email: z.string().email("সঠিক ইমেইল দিন"),
   password: z.string().min(1, "পাসওয়ার্ড দিন"),
@@ -163,17 +161,12 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-accent/5">
+    <div className="min-h-screen relative overflow-hidden bg-[hsl(220,18%,10%)]">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute top-1/2 -left-20 w-60 h-60 bg-accent/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute -bottom-20 right-1/4 w-72 h-72 bg-primary/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
-        
-        {/* Floating geometric shapes */}
-        <div className="absolute top-20 left-10 w-4 h-4 bg-primary/20 rounded-full animate-bounce" style={{ animationDelay: '0.5s' }} />
-        <div className="absolute top-40 right-20 w-3 h-3 bg-accent/30 rounded-full animate-bounce" style={{ animationDelay: '1s' }} />
-        <div className="absolute bottom-40 left-1/4 w-2 h-2 bg-primary/25 rounded-full animate-bounce" style={{ animationDelay: '1.5s' }} />
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-[hsl(174,55%,40%)]/10 rounded-full blur-3xl" />
+        <div className="absolute top-1/3 -left-20 w-72 h-72 bg-[hsl(174,55%,50%)]/8 rounded-full blur-3xl" />
+        <div className="absolute -bottom-32 right-1/3 w-80 h-80 bg-[hsl(174,50%,45%)]/6 rounded-full blur-3xl" />
       </div>
 
       <div className="relative z-10 min-h-screen flex items-center justify-center p-4">
@@ -184,9 +177,9 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
               variant="ghost"
               size="sm"
               onClick={toggleLanguage}
-              className="gap-2 bg-background/60 backdrop-blur-sm border border-border/50 hover:bg-background/80 rounded-full px-4"
+              className="gap-2 bg-[hsl(220,15%,16%)]/80 backdrop-blur-sm border border-[hsl(220,15%,22%)] hover:bg-[hsl(220,15%,20%)] text-[hsl(220,10%,85%)] rounded-full px-4"
             >
-              <Globe className="w-4 h-4 text-primary" />
+              <Globe className="w-4 h-4 text-[hsl(174,55%,50%)]" />
               <span className="text-sm font-medium">
                 {language === "en" ? "বাংলা" : "English"}
               </span>
@@ -195,33 +188,33 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
 
           {/* Logo & Branding */}
           <div className="text-center mb-8">
-            <div className="relative inline-block mb-6">
-              <div className="w-24 h-24 mx-auto bg-gradient-to-br from-primary to-primary/80 rounded-2xl flex items-center justify-center shadow-lg shadow-primary/25 transform rotate-3 hover:rotate-0 transition-transform duration-500">
-                <span className="text-4xl font-bold text-primary-foreground">U</span>
+            <div className="relative inline-block mb-5">
+              <div className="w-20 h-20 mx-auto bg-[hsl(174,55%,45%)] rounded-2xl flex items-center justify-center shadow-lg shadow-[hsl(174,55%,45%)]/30 transform rotate-3 hover:rotate-0 transition-transform duration-500">
+                <span className="text-3xl font-bold text-[hsl(220,18%,10%)]">U</span>
               </div>
-              <div className="absolute -top-1 -right-1 w-6 h-6 bg-accent rounded-full flex items-center justify-center shadow-md">
-                <Sparkles className="w-3.5 h-3.5 text-accent-foreground" />
+              <div className="absolute -top-1 -right-1 w-5 h-5 bg-[hsl(174,50%,60%)] rounded-full flex items-center justify-center shadow-md">
+                <Sparkles className="w-3 h-3 text-[hsl(220,18%,10%)]" />
               </div>
             </div>
-            <h1 className="text-4xl font-display font-bold bg-gradient-to-r from-foreground via-foreground to-foreground/70 bg-clip-text text-transparent mb-2">
+            <h1 className="text-3xl font-display font-bold text-[hsl(220,10%,95%)] mb-1.5 tracking-tight">
               UnityNets
             </h1>
-            <p className="text-base text-muted-foreground font-medium">
-              {t("Together We Are Strong", "একত্রে শক্তিশালী")} ✨
+            <p className="text-sm text-[hsl(174,55%,50%)] font-medium tracking-wide">
+              Trust • Learn • Unite
             </p>
           </div>
 
           {/* Main Card */}
-          <div className="bg-background/70 backdrop-blur-xl border border-border/50 rounded-3xl shadow-2xl shadow-primary/5 p-8">
+          <div className="bg-[hsl(220,15%,13%)]/90 backdrop-blur-xl border border-[hsl(220,15%,20%)] rounded-2xl shadow-2xl p-7">
             {/* Tab Switch */}
-            <div className="flex mb-8 bg-muted/50 rounded-2xl p-1.5">
+            <div className="flex mb-7 bg-[hsl(220,15%,10%)] rounded-xl p-1">
               <button
                 type="button"
                 onClick={() => setIsRegistering(false)}
-                className={`flex-1 py-3 text-sm font-semibold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 ${
+                className={`flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all duration-300 flex items-center justify-center gap-2 ${
                   !isRegistering 
-                    ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/25' 
-                    : 'text-muted-foreground hover:text-foreground'
+                    ? 'bg-[hsl(174,55%,45%)] text-[hsl(220,18%,10%)] shadow-lg shadow-[hsl(174,55%,45%)]/25' 
+                    : 'text-[hsl(220,10%,55%)] hover:text-[hsl(220,10%,75%)]'
                 }`}
               >
                 <LogIn className="w-4 h-4" />
@@ -230,10 +223,10 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
               <button
                 type="button"
                 onClick={() => setIsRegistering(true)}
-                className={`flex-1 py-3 text-sm font-semibold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 ${
+                className={`flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all duration-300 flex items-center justify-center gap-2 ${
                   isRegistering 
-                    ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/25' 
-                    : 'text-muted-foreground hover:text-foreground'
+                    ? 'bg-[hsl(174,55%,45%)] text-[hsl(220,18%,10%)] shadow-lg shadow-[hsl(174,55%,45%)]/25' 
+                    : 'text-[hsl(220,10%,55%)] hover:text-[hsl(220,10%,75%)]'
                 }`}
               >
                 <UserPlus className="w-4 h-4" />
@@ -243,111 +236,109 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
 
             {isRegistering ? (
               /* Signup Form */
-              <form onSubmit={signupForm.handleSubmit(onSignupSubmit)} className="space-y-5">
-                <div className="space-y-2">
-                  <Label htmlFor="fullName" className="text-sm font-semibold text-foreground">
+              <form onSubmit={signupForm.handleSubmit(onSignupSubmit)} className="space-y-4">
+                <div className="space-y-1.5">
+                  <Label htmlFor="fullName" className="text-sm font-medium text-[hsl(220,10%,85%)]">
                     {t("Your Name", "আপনার নাম")}
                   </Label>
-                  <div className="relative group">
-                    <Input
-                      id="fullName"
-                      type="text"
-                      placeholder={t("Enter full name", "সম্পূর্ণ নাম লিখুন")}
-                      className="h-12 bg-muted/30 border-border/50 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all pl-4"
-                      {...signupForm.register("fullName")}
-                    />
-                  </div>
+                  <Input
+                    id="fullName"
+                    type="text"
+                    placeholder={t("Enter full name", "সম্পূর্ণ নাম লিখুন")}
+                    className="h-11 bg-[hsl(220,15%,10%)] border-[hsl(220,15%,20%)] text-[hsl(220,10%,95%)] placeholder:text-[hsl(220,10%,40%)] rounded-xl focus:border-[hsl(174,55%,45%)] focus:ring-1 focus:ring-[hsl(174,55%,45%)]/30"
+                    {...signupForm.register("fullName")}
+                  />
                   {signupForm.formState.errors.fullName && (
-                    <p className="text-xs text-destructive flex items-center gap-1">
+                    <p className="text-xs text-[hsl(0,72%,55%)] flex items-center gap-1">
                       <AlertTriangle className="w-3 h-3" />
                       {signupForm.formState.errors.fullName.message}
                     </p>
                   )}
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="text-sm font-semibold text-foreground">
+                <div className="space-y-1.5">
+                  <Label htmlFor="email" className="text-sm font-medium text-[hsl(220,10%,85%)]">
                     {t("Email", "ইমেইল")}
                   </Label>
-                  <div className="relative group">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                  <div className="relative">
+                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[hsl(220,10%,45%)]" />
                     <Input
                       id="email"
                       type="email"
                       placeholder={t("your@email.com", "আপনার@ইমেইল.com")}
-                      className="h-12 bg-muted/30 border-border/50 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all pl-11"
+                      className="h-11 pl-10 bg-[hsl(220,15%,10%)] border-[hsl(220,15%,20%)] text-[hsl(220,10%,95%)] placeholder:text-[hsl(220,10%,40%)] rounded-xl focus:border-[hsl(174,55%,45%)] focus:ring-1 focus:ring-[hsl(174,55%,45%)]/30"
                       {...signupForm.register("email")}
                     />
                   </div>
                   {signupForm.formState.errors.email && (
-                    <p className="text-xs text-destructive flex items-center gap-1">
+                    <p className="text-xs text-[hsl(0,72%,55%)] flex items-center gap-1">
                       <AlertTriangle className="w-3 h-3" />
                       {signupForm.formState.errors.email.message}
                     </p>
                   )}
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="phone" className="text-sm font-semibold text-foreground">
+                <div className="space-y-1.5">
+                  <Label htmlFor="phone" className="text-sm font-medium text-[hsl(220,10%,85%)]">
                     {t("Mobile Number (Optional)", "মোবাইল নম্বর (ঐচ্ছিক)")}
                   </Label>
-                  <div className="relative group">
-                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                  <div className="relative">
+                    <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[hsl(220,10%,45%)]" />
                     <Input
                       id="phone"
                       type="tel"
                       placeholder="01XXXXXXXXX"
-                      className="h-12 bg-muted/30 border-border/50 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all pl-11"
+                      className="h-11 pl-10 bg-[hsl(220,15%,10%)] border-[hsl(220,15%,20%)] text-[hsl(220,10%,95%)] placeholder:text-[hsl(220,10%,40%)] rounded-xl focus:border-[hsl(174,55%,45%)] focus:ring-1 focus:ring-[hsl(174,55%,45%)]/30"
                       {...signupForm.register("phone")}
                     />
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="password" className="text-sm font-semibold text-foreground">
+                <div className="space-y-1.5">
+                  <Label htmlFor="password" className="text-sm font-medium text-[hsl(220,10%,85%)]">
                     {t("Password", "পাসওয়ার্ড")}
                   </Label>
-                  <div className="relative group">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                  <div className="relative">
+                    <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[hsl(220,10%,45%)]" />
                     <Input
                       id="password"
                       type={showPassword ? "text" : "password"}
                       placeholder={t("At least 6 characters", "কমপক্ষে ৬ অক্ষর")}
-                      className="h-12 bg-muted/30 border-border/50 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all pl-11 pr-12"
+                      className="h-11 pl-10 pr-11 bg-[hsl(220,15%,10%)] border-[hsl(220,15%,20%)] text-[hsl(220,10%,95%)] placeholder:text-[hsl(220,10%,40%)] rounded-xl focus:border-[hsl(174,55%,45%)] focus:ring-1 focus:ring-[hsl(174,55%,45%)]/30"
                       {...signupForm.register("password")}
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[hsl(220,10%,45%)] hover:text-[hsl(220,10%,70%)] transition-colors"
                     >
                       {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
                   </div>
                   {signupForm.formState.errors.password && (
-                    <p className="text-xs text-destructive flex items-center gap-1">
+                    <p className="text-xs text-[hsl(0,72%,55%)] flex items-center gap-1">
                       <AlertTriangle className="w-3 h-3" />
                       {signupForm.formState.errors.password.message}
                     </p>
                   )}
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="confirmPassword" className="text-sm font-semibold text-foreground">
+                <div className="space-y-1.5">
+                  <Label htmlFor="confirmPassword" className="text-sm font-medium text-[hsl(220,10%,85%)]">
                     {t("Confirm Password", "পাসওয়ার্ড নিশ্চিত করুন")}
                   </Label>
-                  <div className="relative group">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                  <div className="relative">
+                    <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[hsl(220,10%,45%)]" />
                     <Input
                       id="confirmPassword"
                       type="password"
                       placeholder={t("Re-enter password", "আবার পাসওয়ার্ড লিখুন")}
-                      className="h-12 bg-muted/30 border-border/50 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all pl-11"
+                      className="h-11 pl-10 bg-[hsl(220,15%,10%)] border-[hsl(220,15%,20%)] text-[hsl(220,10%,95%)] placeholder:text-[hsl(220,10%,40%)] rounded-xl focus:border-[hsl(174,55%,45%)] focus:ring-1 focus:ring-[hsl(174,55%,45%)]/30"
                       {...signupForm.register("confirmPassword")}
                     />
                   </div>
                   {signupForm.formState.errors.confirmPassword && (
-                    <p className="text-xs text-destructive flex items-center gap-1">
+                    <p className="text-xs text-[hsl(0,72%,55%)] flex items-center gap-1">
                       <AlertTriangle className="w-3 h-3" />
                       {signupForm.formState.errors.confirmPassword.message}
                     </p>
@@ -356,11 +347,11 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
 
                 <Button 
                   type="submit" 
-                  className="w-full h-12 rounded-xl text-base font-semibold bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300 hover:-translate-y-0.5 group" 
+                  className="w-full h-11 rounded-xl text-sm font-semibold bg-[hsl(174,55%,45%)] hover:bg-[hsl(174,55%,40%)] text-[hsl(220,18%,10%)] shadow-lg shadow-[hsl(174,55%,45%)]/25 hover:shadow-xl hover:shadow-[hsl(174,55%,45%)]/30 transition-all duration-300 hover:-translate-y-0.5 group mt-2" 
                   disabled={isLoading}
                 >
                   {isLoading ? (
-                    <div className="animate-spin rounded-full h-5 w-5 border-2 border-primary-foreground border-t-transparent" />
+                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-[hsl(220,18%,10%)] border-t-transparent" />
                   ) : (
                     <>
                       {t("Create Account", "অ্যাকাউন্ট তৈরি করুন")}
@@ -369,12 +360,12 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
                   )}
                 </Button>
 
-                <p className="text-xs text-center text-muted-foreground pt-2">
+                <p className="text-xs text-center text-[hsl(220,10%,50%)] pt-1">
                   {t("By registering you agree to our", "নিবন্ধন করে আপনি আমাদের")}{" "}
                   <button 
                     type="button"
                     onClick={() => setShowTerms(true)}
-                    className="text-primary hover:underline font-semibold"
+                    className="text-[hsl(174,55%,50%)] hover:underline font-medium"
                   >
                     {t("Terms & Conditions", "শর্তাবলী")}
                   </button>{" "}
@@ -383,52 +374,52 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
               </form>
             ) : (
               /* Login Form */
-              <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-5">
-                <div className="space-y-2">
-                  <Label htmlFor="loginEmail" className="text-sm font-semibold text-foreground">
+              <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-4">
+                <div className="space-y-1.5">
+                  <Label htmlFor="loginEmail" className="text-sm font-medium text-[hsl(220,10%,85%)]">
                     {t("Email", "ইমেইল")}
                   </Label>
-                  <div className="relative group">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                  <div className="relative">
+                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[hsl(220,10%,45%)]" />
                     <Input
                       id="loginEmail"
                       type="email"
                       placeholder={t("your@email.com", "আপনার@ইমেইল.com")}
-                      className="h-12 bg-muted/30 border-border/50 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all pl-11"
+                      className="h-11 pl-10 bg-[hsl(220,15%,10%)] border-[hsl(220,15%,20%)] text-[hsl(220,10%,95%)] placeholder:text-[hsl(220,10%,40%)] rounded-xl focus:border-[hsl(174,55%,45%)] focus:ring-1 focus:ring-[hsl(174,55%,45%)]/30"
                       {...loginForm.register("email")}
                     />
                   </div>
                   {loginForm.formState.errors.email && (
-                    <p className="text-xs text-destructive flex items-center gap-1">
+                    <p className="text-xs text-[hsl(0,72%,55%)] flex items-center gap-1">
                       <AlertTriangle className="w-3 h-3" />
                       {loginForm.formState.errors.email.message}
                     </p>
                   )}
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="loginPassword" className="text-sm font-semibold text-foreground">
+                <div className="space-y-1.5">
+                  <Label htmlFor="loginPassword" className="text-sm font-medium text-[hsl(220,10%,85%)]">
                     {t("Password", "পাসওয়ার্ড")}
                   </Label>
-                  <div className="relative group">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                  <div className="relative">
+                    <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[hsl(220,10%,45%)]" />
                     <Input
                       id="loginPassword"
                       type={showPassword ? "text" : "password"}
                       placeholder={t("Your password", "আপনার পাসওয়ার্ড")}
-                      className="h-12 bg-muted/30 border-border/50 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all pl-11 pr-12"
+                      className="h-11 pl-10 pr-11 bg-[hsl(220,15%,10%)] border-[hsl(220,15%,20%)] text-[hsl(220,10%,95%)] placeholder:text-[hsl(220,10%,40%)] rounded-xl focus:border-[hsl(174,55%,45%)] focus:ring-1 focus:ring-[hsl(174,55%,45%)]/30"
                       {...loginForm.register("password")}
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[hsl(220,10%,45%)] hover:text-[hsl(220,10%,70%)] transition-colors"
                     >
                       {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
                   </div>
                   {loginForm.formState.errors.password && (
-                    <p className="text-xs text-destructive flex items-center gap-1">
+                    <p className="text-xs text-[hsl(0,72%,55%)] flex items-center gap-1">
                       <AlertTriangle className="w-3 h-3" />
                       {loginForm.formState.errors.password.message}
                     </p>
@@ -438,7 +429,7 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
                 <div className="flex justify-end">
                   <button
                     type="button"
-                    className="text-sm text-primary hover:underline font-medium"
+                    className="text-xs text-[hsl(174,55%,50%)] hover:underline font-medium"
                     onClick={() => toast({ title: t("Coming Soon", "শীঘ্রই আসছে"), description: t("Password reset feature coming soon", "পাসওয়ার্ড রিসেট ফিচার শীঘ্রই আসছে") })}
                   >
                     {t("Forgot Password?", "পাসওয়ার্ড ভুলে গেছেন?")}
@@ -447,11 +438,11 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
 
                 <Button 
                   type="submit" 
-                  className="w-full h-12 rounded-xl text-base font-semibold bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300 hover:-translate-y-0.5 group" 
+                  className="w-full h-11 rounded-xl text-sm font-semibold bg-[hsl(174,55%,45%)] hover:bg-[hsl(174,55%,40%)] text-[hsl(220,18%,10%)] shadow-lg shadow-[hsl(174,55%,45%)]/25 hover:shadow-xl hover:shadow-[hsl(174,55%,45%)]/30 transition-all duration-300 hover:-translate-y-0.5 group mt-2" 
                   disabled={isLoading}
                 >
                   {isLoading ? (
-                    <div className="animate-spin rounded-full h-5 w-5 border-2 border-primary-foreground border-t-transparent" />
+                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-[hsl(220,18%,10%)] border-t-transparent" />
                   ) : (
                     <>
                       {t("Sign In", "সাইন ইন করুন")}
@@ -461,9 +452,9 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
                 </Button>
 
                 {/* Social Proof */}
-                <div className="pt-4 border-t border-border/50 mt-6">
-                  <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-                    <Users className="w-4 h-4 text-primary" />
+                <div className="pt-5 border-t border-[hsl(220,15%,18%)] mt-6">
+                  <div className="flex items-center justify-center gap-2 text-sm text-[hsl(220,10%,50%)]">
+                    <Users className="w-4 h-4 text-[hsl(174,55%,50%)]" />
                     <span>{t("Join 10,000+ members today", "আজই ১০,০০০+ সদস্যদের সাথে যোগ দিন")}</span>
                   </div>
                 </div>
@@ -480,9 +471,9 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
             ].map((feature, index) => (
               <div 
                 key={index}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-background/60 backdrop-blur-sm border border-border/50 rounded-full text-xs font-medium text-muted-foreground"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-[hsl(220,15%,13%)]/80 backdrop-blur-sm border border-[hsl(220,15%,20%)] rounded-full text-xs font-medium text-[hsl(220,10%,60%)]"
               >
-                <feature.icon className="w-3 h-3 text-primary" />
+                <feature.icon className="w-3 h-3 text-[hsl(174,55%,50%)]" />
                 {feature.label}
               </div>
             ))}
@@ -490,7 +481,7 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
 
           {/* Footer */}
           <div className="mt-8 text-center">
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-[hsl(220,10%,45%)]">
               © 2025 UnityNets. {t("All rights reserved.", "সর্বস্বত্ব সংরক্ষিত।")}
             </p>
           </div>
@@ -499,26 +490,26 @@ export const Login = ({ users, onLogin, onRegister }: LoginProps) => {
 
       {/* Terms Dialog */}
       <Dialog open={showTerms} onOpenChange={setShowTerms}>
-        <DialogContent className="max-w-lg max-h-[80vh] rounded-2xl">
+        <DialogContent className="max-w-lg max-h-[80vh] rounded-2xl bg-[hsl(220,15%,13%)] border-[hsl(220,15%,20%)]">
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold flex items-center gap-2">
-              <FileText className="w-5 h-5 text-primary" />
+            <DialogTitle className="text-xl font-bold flex items-center gap-2 text-[hsl(220,10%,95%)]">
+              <FileText className="w-5 h-5 text-[hsl(174,55%,50%)]" />
               {t("Terms & Conditions", "শর্তাবলী")}
             </DialogTitle>
           </DialogHeader>
           <ScrollArea className="h-[60vh] pr-4">
-            <div className="space-y-6">
+            <div className="space-y-4">
               {termsContent.map((section, index) => (
-                <div key={index} className="space-y-2 p-4 rounded-xl bg-muted/30">
+                <div key={index} className="space-y-2 p-4 rounded-xl bg-[hsl(220,15%,10%)] border border-[hsl(220,15%,18%)]">
                   <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                      <section.icon className="w-4 h-4 text-primary" />
+                    <div className="w-8 h-8 rounded-lg bg-[hsl(174,55%,45%)]/10 flex items-center justify-center">
+                      <section.icon className="w-4 h-4 text-[hsl(174,55%,50%)]" />
                     </div>
-                    <h3 className="font-semibold">
+                    <h3 className="font-semibold text-[hsl(220,10%,90%)]">
                       {language === "en" ? section.titleEn : section.title}
                     </h3>
                   </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed pl-10">
+                  <p className="text-sm text-[hsl(220,10%,55%)] leading-relaxed pl-10">
                     {section.content}
                   </p>
                 </div>
