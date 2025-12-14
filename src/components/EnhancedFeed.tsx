@@ -25,6 +25,7 @@ import {
 import { CommentSection } from "@/components/CommentSection";
 import { ShareButton } from "@/components/ShareButton";
 import { useNavigate } from "react-router-dom";
+import { ImageCarousel } from "@/components/ImageCarousel";
 
 interface EnhancedFeedProps {
   posts: Post[];
@@ -372,44 +373,10 @@ export const EnhancedFeed = ({
               </div>
             )}
 
-            {/* Post Images */}
+            {/* Post Images - Carousel */}
             {post.images && post.images.length > 0 && (
-              <div className={`mt-3 grid gap-1 rounded-xl overflow-hidden ${
-                post.images.length === 1 ? 'grid-cols-1' : 
-                post.images.length === 2 ? 'grid-cols-2' : 
-                post.images.length === 3 ? 'grid-cols-2' : 'grid-cols-2'
-              }`}>
-                {post.images.slice(0, 4).map((image, index) => (
-                  <div 
-                    key={index} 
-                    className={`relative ${post.images!.length === 3 && index === 0 ? 'row-span-2' : ''}`}
-                  >
-                    <img
-                      src={image}
-                      alt={`Post image ${index + 1}`}
-                      className={`w-full object-cover cursor-pointer hover:brightness-95 transition-all ${
-                        post.images!.length === 1 ? 'max-h-[400px]' : 'h-48'
-                      }`}
-                      onClick={() => {
-                        const overlay = document.createElement('div');
-                        overlay.className = 'fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 backdrop-blur-sm';
-                        overlay.onclick = () => overlay.remove();
-                        
-                        const img = document.createElement('img');
-                        img.src = image;
-                        img.className = 'max-w-full max-h-full object-contain rounded-lg shadow-2xl';
-                        
-                        overlay.appendChild(img);
-                        document.body.appendChild(overlay);
-                      }}
-                    />
-                    {post.images!.length > 4 && index === 3 && (
-                      <div className="absolute inset-0 bg-black/70 flex items-center justify-center text-white font-bold text-2xl backdrop-blur-sm">
-                        +{post.images!.length - 4}
-                      </div>
-                    )}
-                  </div>
-                ))}
+              <div className="mt-3">
+                <ImageCarousel images={post.images} />
               </div>
             )}
 

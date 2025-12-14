@@ -72,10 +72,10 @@ export const EnhancedPostForm = ({ user, onPostCreated, initialPostType = 'text'
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     
-    if (images.length + files.length > 4) {
+    if (images.length + files.length > 25) {
       toast({
         title: "ত্রুটি",
-        description: "সর্বোচ্চ ৪টি ছবি যুক্ত করতে পারেন",
+        description: "সর্বোচ্চ ২৫টি ছবি যুক্ত করতে পারেন",
         variant: "destructive"
       });
       return;
@@ -428,9 +428,10 @@ export const EnhancedPostForm = ({ user, onPostCreated, initialPostType = 'text'
                 variant="outline"
                 onClick={() => fileInputRef.current?.click()}
                 className="w-full"
+                disabled={images.length >= 25}
               >
                 <Camera className="w-4 h-4 mr-2" />
-                ছবি যুক্ত করুন
+                ছবি যুক্ত করুন ({images.length}/২৫)
               </Button>
             </TabsContent>
 
@@ -560,26 +561,55 @@ export const EnhancedPostForm = ({ user, onPostCreated, initialPostType = 'text'
               />
             </TabsContent>
 
-            {/* Image preview */}
+            {/* Image preview - scrollable grid for many images */}
             {images.length > 0 && (
-              <div className="grid grid-cols-2 gap-2">
-                {images.map((img, index) => (
-                  <div key={index} className="relative">
-                    <img src={img.preview} alt={`Preview ${index + 1}`} className="w-full h-32 object-cover rounded-lg" />
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      size="sm"
-                      className="absolute top-2 right-2 w-6 h-6 rounded-full p-0"
-                      onClick={() => {
-                        URL.revokeObjectURL(img.preview);
-                        setImages(images.filter((_, i) => i !== index));
-                      }}
-                    >
-                      <X size={12} />
-                    </Button>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium text-muted-foreground">
+                    {images.length}টি ছবি নির্বাচিত
+                  </span>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="text-destructive hover:text-destructive"
+                    onClick={() => {
+                      images.forEach(img => URL.revokeObjectURL(img.preview));
+                      setImages([]);
+                    }}
+                  >
+                    <X className="w-4 h-4 mr-1" />
+                    সব মুছুন
+                  </Button>
+                </div>
+                <div className="max-h-64 overflow-y-auto">
+                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
+                    {images.map((img, index) => (
+                      <div key={index} className="relative aspect-square group">
+                        <img 
+                          src={img.preview} 
+                          alt={`Preview ${index + 1}`} 
+                          className="w-full h-full object-cover rounded-lg" 
+                        />
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
+                          <span className="text-white text-xs font-medium">{index + 1}</span>
+                        </div>
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="sm"
+                          className="absolute top-1 right-1 w-5 h-5 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                          onClick={() => {
+                            URL.revokeObjectURL(img.preview);
+                            setImages(images.filter((_, i) => i !== index));
+                          }}
+                        >
+                          <X size={10} />
+                        </Button>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                </div>
               </div>
             )}
             
