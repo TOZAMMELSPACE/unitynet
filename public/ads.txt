@@ -1,1 +1,22 @@
+# Google AdSense
 google.com, pub-1268147765220924, DIRECT, f08c47fec0942fa0
+
+# Ezoic
+ezoic.com, pub-1268147765220924, DIRECT
+google.com, pub-9390378654498498, RESELLER, f08c47fec0942fa0
+google.com, pub-3769010358500643, RESELLER, f08c47fec0942fa0
+appnexus.com, 7666, RESELLER
+rubiconproject.com, 17632, RESELLER
+openx.com, 537143344, RESELLER, 6a698e2ec38604c6
+pubmatic.com, 156423, RESELLER, 5d62403b186f2ace
+contextweb.com, 560606, RESELLER, 89ff185a4c4e857c
+33across.com, 0010b00002MptHCAAZ, RESELLER, bbea06d9c4d2853c
+rhythmone.com, 1654642120, RESELLER, a670c89d4a324e47
+improvedigital.com, 1512, RESELLER
+smartadserver.com, 3713, RESELLER
+sonobi.com, 7f5fa520f8, RESELLER, d1a215d9eb5aee9e
+indexexchange.com, 191497, RESELLER, 50b1c356f2c5c8fc
+triplelift.com, 8495, RESELLER, 6c33edb13117fd86
+adtech.com, 11095, RESELLER
+yahoo.com, 55029, RESELLER, e1a5b5b6e3255540
+advertising.com, 28246, RESELLER
