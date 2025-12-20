@@ -5,6 +5,7 @@ import { FloatingActionButton } from "@/components/FloatingActionButton";
 import { FeedFilter } from "@/components/FeedFilter";
 import { Skeleton } from "@/components/ui/skeleton";
 import AdSense from "@/components/AdSense";
+import EzoicAd from "@/components/EzoicAd";
 
 import { User, Post } from "@/lib/storage";
 
@@ -163,10 +164,9 @@ const Index = ({
 
         {/* Right Sidebar - All Widgets (Lazy Loaded) */}
         <aside className="hidden lg:block lg:col-span-4 space-y-6">
-          {/* AdSense Top Banner */}
-          <AdSense 
-            adSlot="YOUR_AD_SLOT_ID" 
-            adFormat="rectangle" 
+          {/* Ezoic Top Banner */}
+          <EzoicAd 
+            placeholderId={101} 
             className="rounded-xl overflow-hidden"
           />
           
@@ -179,10 +179,9 @@ const Index = ({
             <UsersList users={users} currentUserId={currentUser?.id} />
           </Suspense>
           
-          {/* AdSense Mid Banner */}
-          <AdSense 
-            adSlot="YOUR_AD_SLOT_ID_2" 
-            adFormat="auto" 
+          {/* Ezoic Mid Banner */}
+          <EzoicAd 
+            placeholderId={102} 
             className="rounded-xl overflow-hidden"
           />
           
