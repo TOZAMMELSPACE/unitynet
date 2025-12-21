@@ -302,6 +302,85 @@ const TermsAndConditions = () => {
 • VPN usage may have restrictions
 • Some services only apply in Bangladesh
 • Different rules may apply in different countries`
+    },
+    {
+      icon: Eye,
+      titleBn: "১৫. গোপনীয়তা নীতি (Privacy Policy)",
+      titleEn: "15. Privacy Policy",
+      contentBn: `আমাদের গোপনীয়তা নীতি:
+
+📊 তথ্য সংগ্রহ:
+• নাম, ইমেইল, ফোন নম্বর (রেজিস্ট্রেশনের জন্য)
+• প্রোফাইল ছবি ও বায়ো (আপনার দেওয়া)
+• IP ঠিকানা ও ডিভাইসের তথ্য
+• ব্রাউজার ধরন ও অপারেটিং সিস্টেম
+• কুকিজ ও সেশন ডাটা
+• ব্যবহারের প্যাটার্ন ও পরিসংখ্যান
+
+🎯 তথ্য ব্যবহার:
+• আপনার অ্যাকাউন্ট পরিচালনা
+• সেবা উন্নতি ও ব্যক্তিগতকরণ
+• নিরাপত্তা ও জালিয়াতি প্রতিরোধ
+• বিজ্ঞাপন প্রদর্শন (Ezoic, Google AdSense)
+• বিশ্লেষণ ও পরিসংখ্যান (Analytics)
+
+🔐 তথ্য সুরক্ষা:
+• SSL/TLS এনক্রিপশন
+• নিয়মিত নিরাপত্তা অডিট
+• সীমিত কর্মী প্রবেশাধিকার
+
+🍪 কুকিজ ও বিজ্ঞাপন:
+• আমরা Ezoic ও Google AdSense ব্যবহার করি
+• তৃতীয় পক্ষ কুকিজ ব্যবহার করতে পারে
+• আপনি ব্রাউজার সেটিংস থেকে কুকি নিয়ন্ত্রণ করতে পারেন
+
+✋ আপনার অধিকার:
+• তথ্য দেখা ও ডাউনলোড করা
+• তথ্য সংশোধন করা
+• অ্যাকাউন্ট মুছে ফেলা
+• মার্কেটিং থেকে প্রত্যাহার`,
+      contentEn: `Our Privacy Policy:
+
+📊 Information We Collect:
+• Name, email, phone number (for registration)
+• Profile photo and bio (provided by you)
+• IP address and device information
+• Browser type and operating system
+• Cookies and session data
+• Usage patterns and statistics
+
+🎯 How We Use Information:
+• Managing your account
+• Improving and personalizing services
+• Security and fraud prevention
+• Displaying advertisements (Ezoic, Google AdSense)
+• Analytics and statistics
+
+🔐 Data Protection:
+• SSL/TLS encryption
+• Regular security audits
+• Limited staff access
+
+🍪 Cookies & Advertising:
+• We use Ezoic and Google AdSense for advertising
+• Third parties may use cookies for ad personalization
+• You can control cookies through browser settings
+• We partner with ad networks that may collect data for targeted advertising
+
+✋ Your Rights:
+• View and download your data
+• Correct your information
+• Delete your account
+• Opt-out of marketing communications
+
+📍 Third-Party Services:
+• Google Analytics for website analytics
+• Ezoic for ad optimization and analytics
+• These services may collect data according to their own privacy policies
+
+For more information about how our ad partners use your data:
+• Google Privacy Policy: https://policies.google.com/privacy
+• Ezoic Privacy Policy: https://www.ezoic.com/privacy-policy/`
     }
   ];
 
@@ -350,7 +429,7 @@ const TermsAndConditions = () => {
             
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 pt-3 sm:pt-4 border-t border-primary/10">
               <div className="text-center p-2 bg-background/50 rounded-lg">
-                <p className="text-lg sm:text-xl font-bold text-primary">১৪</p>
+                <p className="text-lg sm:text-xl font-bold text-primary">১৫</p>
                 <p className="text-[10px] sm:text-xs text-muted-foreground">Sections</p>
               </div>
               <div className="text-center p-2 bg-background/50 rounded-lg">
