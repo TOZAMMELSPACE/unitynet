@@ -88,7 +88,7 @@ export const HeroSection = () => {
             size="lg" 
             variant="hero"
             className="text-lg px-8 py-6 rounded-xl group"
-            onClick={() => navigate('/', { state: { showSignup: true } })}
+            onClick={() => navigate('/auth?mode=signup')}
           >
             <span className="text-bengali">এখনই ফ্রি জয়েন করুন</span>
             <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -97,7 +97,7 @@ export const HeroSection = () => {
             size="lg" 
             variant="outline"
             className="text-lg px-8 py-6 rounded-xl"
-            onClick={() => navigate('/', { state: { showLogin: true } })}
+            onClick={() => navigate('/auth?mode=login')}
           >
             <span className="text-bengali">অলরেডি মেম্বার? লগইন করুন</span>
           </Button>

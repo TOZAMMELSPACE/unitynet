@@ -88,7 +88,7 @@ export const Navbar = () => {
             <Button
               variant="ghost"
               className="hidden sm:flex text-bengali"
-              onClick={() => navigate('/', { state: { showLogin: true } })}
+              onClick={() => navigate('/auth?mode=login')}
             >
               লগইন
             </Button>
@@ -97,7 +97,7 @@ export const Navbar = () => {
             <Button
               variant="hero"
               className="hidden sm:flex text-bengali"
-              onClick={() => navigate('/', { state: { showSignup: true } })}
+              onClick={() => navigate('/auth?mode=signup')}
             >
               জয়েন করুন
             </Button>
@@ -142,7 +142,7 @@ export const Navbar = () => {
                   className="flex-1 text-bengali"
                   onClick={() => {
                     setIsMobileMenuOpen(false);
-                    navigate('/', { state: { showLogin: true } });
+                    navigate('/auth?mode=login');
                   }}
                 >
                   লগইন
@@ -152,7 +152,7 @@ export const Navbar = () => {
                   className="flex-1 text-bengali"
                   onClick={() => {
                     setIsMobileMenuOpen(false);
-                    navigate('/', { state: { showSignup: true } });
+                    navigate('/auth?mode=signup');
                   }}
                 >
                   জয়েন করুন

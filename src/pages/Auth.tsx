@@ -1,12 +1,17 @@
 import { Login } from "@/components/Login";
 import { useAuth } from "@/hooks/useAuth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
 import { User } from "@/lib/storage";
 
 const Auth = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  
+  // Get mode from URL query param (?mode=signup or ?mode=login)
+  const mode = searchParams.get('mode') as 'login' | 'signup' | null;
+  const defaultMode = mode === 'signup' ? 'signup' : 'login';
 
   // Redirect to home feed if already logged in
   useEffect(() => {
@@ -36,6 +41,7 @@ const Auth = () => {
       onLogin={handleLogin}
       onRegister={handleRegister}
       users={[]}
+      defaultMode={defaultMode}
     />
   );
 };
