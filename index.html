@@ -76,6 +76,16 @@
     <link rel="preconnect" href="https://mcjgcgnsdiucbpzzsgsr.supabase.co" crossorigin>
     <link rel="dns-prefetch" href="https://mcjgcgnsdiucbpzzsgsr.supabase.co">
     
+    <!-- Preconnect for ad/consent scripts to reduce latency -->
+    <link rel="preconnect" href="https://fundingchoicesmessages.google.com" crossorigin>
+    <link rel="preconnect" href="https://the.gatekeeperconsent.com" crossorigin>
+    <link rel="preconnect" href="https://privacy.gatekeeperconsent.com" crossorigin>
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin>
+    <link rel="preconnect" href="https://www.ezojs.com" crossorigin>
+    <link rel="dns-prefetch" href="https://fundingchoicesmessages.google.com">
+    <link rel="dns-prefetch" href="https://the.gatekeeperconsent.com">
+    <link rel="dns-prefetch" href="https://cmp.gatekeeperconsent.com">
+    
     <!-- Critical inline CSS for immediate FCP -->
     <style>
       /* Critical inline styles for immediate paint */
@@ -131,12 +141,12 @@
       }
     </style>
     
-    <!-- Google AdSense -->
+    <!-- Google AdSense - async loading -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1268147765220924" crossorigin="anonymous"></script>
     
-    <!-- Ezoic Consent Management -->
-    <script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"></script>
-    <script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"></script>
+    <!-- Ezoic Consent Management - defer to reduce render blocking -->
+    <script defer data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"></script>
+    <script defer data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"></script>
     
     <!-- Ezoic Standalone Ads -->
     <script async src="//www.ezojs.com/ezoic/sa.min.js"></script>
