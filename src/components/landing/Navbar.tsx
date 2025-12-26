@@ -47,12 +47,14 @@ export const Navbar = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group">
             <img 
-              src="/logo.jpg" 
+              src="/logo-optimized.webp" 
               alt="UnityNets Logo" 
               className="w-10 h-10 rounded-lg group-hover:scale-105 transition-transform"
               fetchPriority="high"
               width={40}
               height={40}
+              loading="eager"
+              decoding="async"
             />
             <span className="text-xl font-bold text-primary hidden sm:block">UnityNets</span>
           </Link>
