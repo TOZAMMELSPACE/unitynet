@@ -50,6 +50,9 @@ export const Navbar = () => {
               src="/logo.jpg" 
               alt="UnityNets Logo" 
               className="w-10 h-10 rounded-lg group-hover:scale-105 transition-transform"
+              fetchPriority="high"
+              width={40}
+              height={40}
             />
             <span className="text-xl font-bold text-primary hidden sm:block">UnityNets</span>
           </Link>
