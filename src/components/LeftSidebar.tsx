@@ -34,7 +34,7 @@ export const LeftSidebar = ({ onCreatePost }: LeftSidebarProps) => {
           </div>
           <div>
             <h1 className="text-xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-              UnityNet
+              UnityNets
             </h1>
           </div>
         </div>
